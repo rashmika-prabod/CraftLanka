@@ -1,0 +1,20 @@
+# Built application files & directories
+*.apk
+*.aab
+/build
+/*/build
+.gradle/
+.kotlin/
+
+# IDE & OS Generated files
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Secrets & Local Configuration (CRITICAL FOR DEVOPS SAFETY)
+local.properties
+*.jks
+*.keystore
+secrets.properties
+app/google-services.json
