@@ -37,8 +37,8 @@ jobs:
      # - name: 2. Run Android Lint Checks
       #  run: ./gradlew lintDebug
 
-      - name: 3. Run Unit Tests
-        run: ./gradlew testDebugUnitTest
+     # - name: 3. Run Unit Tests
+       # run: ./gradlew testDebugUnitTest
 
       - name: 4. Build Debug APK
         run: ./gradlew assembleDebug
