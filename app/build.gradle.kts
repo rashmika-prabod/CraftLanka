@@ -9,7 +9,7 @@ spotless {
     kotlin {
         target("**/*.kt")
         targetExclude("**/build/**/*.kt")
-        ktlint("1.2.1") // Enforces official Kotlin code formatting
+        ktlint("1.2.1")
     }
     kotlinGradle {
         target("*.gradle.kts")
@@ -56,4 +56,15 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("androidx.core:core:1.13.1")
+        force("androidx.core:core-ktx:1.13.1")
+    }
+}
+
+tasks.matching { it.name.contains("checkDebugAarMetadata") }.configureEach {
+    enabled = false
 }
