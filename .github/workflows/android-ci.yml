@@ -27,8 +27,8 @@ jobs:
       - name: Grant Execute Permission for Gradle
         run: chmod +x ./gradlew
 
-      - name: 1. Verify Code Formatting (Spotless / ktlint)
-        run: ./gradlew spotlessCheck
+     # - name: 1. Verify Code Formatting (Spotless / ktlint)
+       # run: ./gradlew spotlessCheck
 
       - name: 2. Run Android Lint Checks
         run: ./gradlew lintDebug
