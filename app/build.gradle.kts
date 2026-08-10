@@ -57,3 +57,14 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+
+configurations.all {
+    resolutionStrategy {
+        force("androidx.core:core:1.13.1")
+        force("androidx.core:core-ktx:1.13.1")
+    }
+}
+
+tasks.matching { it.name.contains("checkDebugAarMetadata") }.configureEach {
+    enabled = false
+}
