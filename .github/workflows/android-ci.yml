@@ -2,9 +2,13 @@ name: Android Enterprise CI Pipeline
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "develop", "feature/**" ]
   pull_request:
     branches: [ "main", "develop" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   quality-and-test:
@@ -21,24 +25,40 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Gradle Cache
-        uses: gradle/gradle-build-action@v3
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Decode Google Services JSON
+        env:
+          GOOGLE_SERVICES_SECRET: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
+          if [ -n "$GOOGLE_SERVICES_SECRET" ]; then
+            echo "$GOOGLE_SERVICES_SECRET" | base64 --decode > app/google-services.json
+          else
+            echo "Warning: GOOGLE_SERVICES_JSON secret not found. Generating mock file."
+            echo '{"project_info":{"project_number":"0","project_id":"mock","storage_bucket":"mock"},"client":[{"client_info":{"mobilesdk_app_id":"1:0:android:0","android_client_info":{"package_name":"com.craftlanka.app"}}}]}' > app/google-services.json
+          fi
 
       - name: Grant Execute Permission for Gradle
         run: chmod +x ./gradlew
 
-     # - name: 1. Verify Code Formatting (Spotless / ktlint)
-       # run: ./gradlew spotlessCheck
+      - name: Run Quality Checks & Build
+        run: ./gradlew spotlessCheck lintDebug testDebugUnitTest assembleDebug --stacktrace --build-cache
 
-     # - name: 2. Run Android Lint Checks
-      #  run: ./gradlew lintDebug
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-and-lint-reports
+          path: |
+            app/build/reports/tests/testDebugUnitTest/
+            app/build/reports/lint-results-debug.html
 
-     # - name: 3. Run Unit Tests
-       # run: ./gradlew testDebugUnitTest
-
-      - name: 4. Build Debug APK
-        run: ./gradlew assembleDebug
+      - name: Upload Debug APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk

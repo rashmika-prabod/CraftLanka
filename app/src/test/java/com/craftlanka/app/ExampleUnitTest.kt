@@ -1,12 +1,7 @@
 package com.craftlanka.app
 
-<<<<<<< HEAD
-import org.junit.Assert.*
-import org.junit.Test
-=======
-import org.junit.Test
 import org.junit.Assert.assertEquals
->>>>>>> 6159d4a78ae3db055d7473f8a72567813719f20a
+import org.junit.Test
 
 /**
  * Example local unit test, which will execute on the development machine (host).
