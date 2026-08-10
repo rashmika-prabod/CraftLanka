@@ -9,7 +9,7 @@ spotless {
     kotlin {
         target("**/*.kt")
         targetExclude("**/build/**/*.kt")
-        ktlint("1.2.1") // Enforces official Kotlin code formatting
+        ktlint("1.2.1")
     }
     kotlinGradle {
         target("*.gradle.kts")
@@ -36,7 +36,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
