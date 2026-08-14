@@ -31,6 +31,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    //enable view binding here
+    buildFeatures {
+        viewBinding = true
+
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -56,6 +62,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Lottie Animation Library
+    implementation("com.airbnb.android:lottie:6.4.0")
 }
 
 configurations.all {
