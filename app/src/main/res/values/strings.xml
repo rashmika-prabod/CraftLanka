@@ -3,4 +3,22 @@
     <string name="craftlanka">CraftLanka</string>
     <string name="handcrafted_with_pride">HANDCRAFTED WITH PRIDE</string>
     <string name="connecting_sri_lankan_artisans_nwith_customers">Connecting Sri Lankan artisans\nwith customers</string>
+    <string name="heritage_of_sri_lanka">Heritage of Sri Lanka</string>
+    <string name="get_started">Get Started</string>
+    <string name="supporting_our_local_artisans_by_bringing_their_beautiful_handmade_heritage_directly_to_your_doorstep">Supporting our local artisans by bringing their beautiful, handmade heritage directly to your doorstep.</string>
+    <string name="buy_and_sell_authentic_sri_lankan_handicrafts_in_one_simple_marketplace">Buy and sell authentic Sri Lankan handicrafts in one simple marketplace.</string>
+    <string name="skip">Skip</string>
+    <string name="btn_continue">Continue</string>
+    <string name="tamil">Tamil</string>
+    <string name="sinhala">Sinhala</string>
+    <string name="english">English</string>
+    <string name="select_your_language">Select Your Language</string>
+    <string name="choose_the_language_you_are_most_comfortable_using_for_the_app">Choose the language you are most comfortable using for the app.</string>
+    <string name="choose_how_you_want_to_continue">Choose How You Want to Continue</string>
+    <string name="role_selection_subtitle">Select your role to help us personalize your experience in the Sri Lankan handicraft community.</string>
+    <string name="role_buyer">Buyer</string>
+    <string name="role_buyer_desc">Explore and purchase handmade crafts from across the island.</string>
+    <string name="role_seller">Seller</string>
+    <string name="role_seller_desc">Sell your handmade products easily and reach customers globally.</string>
+    <string name="admin_login">Admin Login</string>
 </resources>

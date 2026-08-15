@@ -31,10 +31,16 @@ class SplashFragment : Fragment() {
         lifecycleScope.launch {
             delay(2500) // Display the splash screen animation for 2.5 seconds
 
-            // Access MainActivity to prepare for navigation
-            val mainActivity = requireActivity() as MainActivity
+            // Ensure fragment is still attached before performing navigation
+            if (isAdded) {
+                val mainActivity = requireActivity() as MainActivity
 
-            // TODO: In the next step, we will check user role and navigate
+                // Navigate to OnboardingFragment
+                mainActivity.navigationManager.replaceFragment(
+                    fragment = OnboardingFragment(),
+                    addToBackStack = false
+                )
+            }
         }
     }
 
