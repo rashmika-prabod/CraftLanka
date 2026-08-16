@@ -1,12 +1,16 @@
 package com.craftlanka.app
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.craftlanka.app.databinding.FragmentSplashBinding
 import androidx.lifecycle.lifecycleScope
+import com.craftlanka.app.admin.AdminLoginFragment
+import com.craftlanka.app.buyer.BuyerLoginFragment
+import com.craftlanka.app.databinding.FragmentSplashBinding
+import com.craftlanka.app.seller.SellerLoginFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -27,21 +31,61 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Run a timer in the background that doesn't block the UI
         lifecycleScope.launch {
-            delay(2500) // Display the splash screen animation for 2.5 seconds
+            delay(2500) // Display splash screen animation for 2.5 seconds
 
-            // Ensure fragment is still attached before performing navigation
             if (isAdded) {
-                val mainActivity = requireActivity() as MainActivity
-
-                // Navigate to OnboardingFragment
-                mainActivity.navigationManager.replaceFragment(
-                    fragment = OnboardingFragment(),
-                    addToBackStack = false
-                )
+                navigateNextScreen()
             }
         }
+    }
+
+    private fun navigateNextScreen() {
+        val mainActivity = requireActivity() as MainActivity
+        val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
+        val userRole = prefs.getString("user_role", null)
+
+        val targetFragment: Fragment = when (userRole) {
+            "admin" -> {
+                val isAdminLoggedIn = prefs.getBoolean("admin_is_logged_in", false)
+                if (isAdminLoggedIn) {
+                    // TODO: Replace with AdminDashboardFragment() when created
+                    AdminLoginFragment()
+                } else {
+                    AdminLoginFragment()
+                }
+            }
+            "seller" -> {
+                val isSellerRemembered = prefs.getBoolean("seller_remember_me", false)
+                val loggedSeller = prefs.getString("logged_seller", null)
+                if (isSellerRemembered && !loggedSeller.isNullOrEmpty()) {
+                    // TODO: Replace with SellerDashboardFragment() when created
+                    SellerLoginFragment()
+                } else {
+                    SellerLoginFragment()
+                }
+            }
+            "buyer" -> {
+                val isBuyerRemembered = prefs.getBoolean("remember_me", false)
+                val loggedBuyer = prefs.getString("logged_user", null)
+                if (isBuyerRemembered && !loggedBuyer.isNullOrEmpty()) {
+                    // TODO: Replace with BuyerDashboardFragment() / HomeFragment() when created
+                    BuyerLoginFragment()
+                } else {
+                    BuyerLoginFragment()
+                }
+            }
+            else -> {
+                // First-time launch or unselected role -> Onboarding Flow
+                OnboardingFragment()
+            }
+        }
+
+        mainActivity.navigationManager.replaceFragment(
+            fragment = targetFragment,
+            addToBackStack = false
+        )
     }
 
     override fun onDestroyView() {

@@ -8,7 +8,10 @@ import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
+import com.craftlanka.app.admin.AdminLoginFragment
+import com.craftlanka.app.buyer.BuyerRegisterFragment
 import com.craftlanka.app.databinding.FragmentRoleSelectionBinding
+import com.craftlanka.app.seller.SellerRegisterFragment
 import com.google.android.material.card.MaterialCardView
 
 class RoleSelectionFragment : Fragment() {
@@ -38,13 +41,23 @@ class RoleSelectionFragment : Fragment() {
         binding.cardBuyer.setOnClickListener { selectRole("buyer") }
         binding.cardSeller.setOnClickListener { selectRole("seller") }
 
-        // Navigation Actions
+        // Navigation Actions for Buyer / Seller
         binding.btnContinue.setOnClickListener {
             saveRoleAndProceed(selectedRole)
         }
 
+        // Navigation Action for Admin Login
         binding.btnAdminLogin.setOnClickListener {
-            // Navigate to Admin Login flow when ready
+            val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+            prefs.edit {
+                putString("user_role", "admin")
+            }
+
+            val mainActivity = requireActivity() as MainActivity
+            mainActivity.navigationManager.replaceFragment(
+                fragment = AdminLoginFragment(),
+                addToBackStack = true
+            )
         }
     }
 
@@ -72,11 +85,15 @@ class RoleSelectionFragment : Fragment() {
 
         val mainActivity = requireActivity() as MainActivity
         if (role == "buyer") {
-            // Navigate to Buyer Home or Auth Screen
-            // mainActivity.navigationManager.replaceFragment(BuyerHomeFragment(), addToBackStack = false)
+            mainActivity.navigationManager.replaceFragment(
+                fragment = BuyerRegisterFragment(),
+                addToBackStack = true
+            )
         } else {
-            // Navigate to Seller Dashboard or Auth Screen
-            // mainActivity.navigationManager.replaceFragment(SellerHomeFragment(), addToBackStack = false)
+            mainActivity.navigationManager.replaceFragment(
+                fragment = SellerRegisterFragment(),
+                addToBackStack = true
+            )
         }
     }
 

@@ -65,6 +65,8 @@ dependencies {
 
     // Lottie Animation Library
     implementation("com.airbnb.android:lottie:6.4.0")
+
+    implementation("androidx.core:core-ktx:1.13.1")
 }
 
 configurations.all {
