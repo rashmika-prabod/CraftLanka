@@ -18,8 +18,7 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_craftlanka_logo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Top Header App Title -->
     <TextView
@@ -48,85 +47,90 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_header_logo" />
 
-    <!-- Rounded Hero Artisan Image -->
-
-    <!-- Headline Text -->
-
-    <!-- Subtitle Description -->
-
-    <!-- Rocket Get Started Button -->
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_hero"
+    <!-- Scrollable Content Container for better responsiveness -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/img_onboarding_artisan"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="4:3"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/layout_heritage_footer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.201"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Corner24dp" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_header_logo">
 
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="3dp"
-        android:text="@string/supporting_our_local_artisans_by_bringing_their_beautiful_handmade_heritage_directly_to_your_doorstep"
-        android:textColor="#42493E"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.658" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="24dp">
 
-    <TextView
-        android:id="@+id/tv_headline"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="4dp"
-        android:text="@string/buy_and_sell_authentic_sri_lankan_handicrafts_in_one_simple_marketplace"
-        android:textColor="#1B1D0E"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.56" />
+            <!-- Rounded Hero Artisan Image (Proportional 4:3) -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_hero"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="24dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_onboarding_artisan"
+                app:layout_constraintDimensionRatio="4:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Corner24dp" />
 
-    <!-- Bottom Heritage Tagline -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_get_started"
-        android:layout_width="wrap_content"
-        android:layout_height="56dp"
-        android:backgroundTint="#0E3818"
-        android:maxWidth="320dp"
-        android:minWidth="280dp"
-        android:text="@string/get_started"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:cornerRadius="28dp"
-        app:icon="@drawable/ic_rocket"
-        app:iconGravity="textStart"
-        app:iconPadding="8dp"
-        app:iconTint="#FFFFFF"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.911" />
+            <!-- Headline Text (Follows Image) -->
+            <TextView
+                android:id="@+id/tv_headline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:lineSpacingExtra="4dp"
+                android:text="@string/buy_and_sell_authentic_sri_lankan_handicrafts_in_one_simple_marketplace"
+                android:textColor="#1B1D0E"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_hero" />
 
+            <!-- Subtitle Description (Follows Headline) -->
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/supporting_our_local_artisans_by_bringing_their_beautiful_handmade_heritage_directly_to_your_doorstep"
+                android:textColor="#42493E"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_headline" />
+
+            <!-- Rocket Get Started Button (Follows Description) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_get_started"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="40dp"
+                android:backgroundTint="#0E3818"
+                android:text="@string/get_started"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="28dp"
+                app:icon="@drawable/ic_rocket"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_description" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Heritage Tagline (Pinned to bottom) -->
     <LinearLayout
         android:id="@+id/layout_heritage_footer"
         android:layout_width="wrap_content"
@@ -135,9 +139,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98">
+        app:layout_constraintStart_toStartOf="parent">
 
         <View
             android:layout_width="40dp"

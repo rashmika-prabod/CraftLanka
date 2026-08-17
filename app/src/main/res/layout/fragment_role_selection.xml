@@ -18,8 +18,7 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_craftlanka_logo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Header App Title -->
     <TextView
@@ -35,179 +34,193 @@
         app:layout_constraintStart_toEndOf="@+id/iv_header_logo"
         app:layout_constraintTop_toTopOf="@+id/iv_header_logo" />
 
-    <!-- Center Mask/Logo Badge -->
-    <ImageView
-        android:id="@+id/iv_center_logo"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_craftlanka_logo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.10" />
-
-    <!-- Main Title -->
-    <TextView
-        android:id="@+id/tv_role_title"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/choose_how_you_want_to_continue"
-        android:textColor="#154212"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@+id/btn_admin_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.21" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_header_logo">
 
-    <!-- Subtitle -->
-    <TextView
-        android:id="@+id/tv_role_subtitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:lineSpacingExtra="3dp"
-        android:text="@string/role_selection_subtitle"
-        android:textColor="#42493E"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.29" />
-
-    <!-- Card: Buyer -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_buyer"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:strokeColor="#0E3818"
-        app:strokeWidth="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45">
-
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="wrap_content"
+            android:paddingBottom="24dp">
 
+            <!-- Center Mask/Logo Badge -->
             <ImageView
-                android:id="@+id/iv_icon_buyer"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
-                android:background="@drawable/bg_circle_orange"
-                android:contentDescription="@string/role_buyer"
-                android:padding="12dp"
-                android:src="@drawable/ic_shopping_bag"
-                app:tint="#D96B27" />
+                android:id="@+id/iv_center_logo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="32dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_craftlanka_logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Main Title -->
             <TextView
-                android:id="@+id/tv_label_buyer"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_role_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="@string/choose_how_you_want_to_continue"
+                android:textColor="#154212"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_center_logo" />
+
+            <!-- Subtitle -->
+            <TextView
+                android:id="@+id/tv_role_subtitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/role_buyer"
-                android:textColor="#8C3B00"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:gravity="center"
-                android:text="@string/role_buyer_desc"
-                android:textColor="#555555"
-                android:textSize="12sp" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                android:lineSpacingExtra="3dp"
+                android:text="@string/role_selection_subtitle"
+                android:textColor="#42493E"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_role_title" />
 
-    <!-- Card: Seller -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_seller"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:strokeColor="#D0D0D0"
-        app:strokeWidth="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.70">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <ImageView
-                android:id="@+id/iv_icon_seller"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
-                android:background="@drawable/bg_circle_orange"
-                android:contentDescription="@string/role_seller"
-                android:padding="12dp"
-                android:src="@drawable/ic_store"
-                app:tint="#D96B27" />
-
-            <TextView
-                android:id="@+id/tv_label_seller"
-                android:layout_width="wrap_content"
+            <!-- Card: Buyer -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_buyer"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/role_seller"
-                android:textColor="#8C3B00"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="32dp"
+                android:minHeight="140dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_role_subtitle"
+                app:strokeColor="#0E3818"
+                app:strokeWidth="2dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_icon_buyer"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:background="@drawable/bg_circle_orange"
+                        android:contentDescription="@string/role_buyer"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_shopping_bag"
+                        app:tint="#D96B27" />
+
+                    <TextView
+                        android:id="@+id/tv_label_buyer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/role_buyer"
+                        android:textColor="#8C3B00"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="@string/role_buyer_desc"
+                        android:textColor="#555555"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card: Seller -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_seller"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:gravity="center"
-                android:text="@string/role_seller_desc"
-                android:textColor="#555555"
-                android:textSize="12sp" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                android:layout_marginTop="16dp"
+                android:minHeight="140dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_buyer"
+                app:strokeColor="#D0D0D0"
+                app:strokeWidth="1dp">
 
-    <!-- Continue Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_continue"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:backgroundTint="#0E3818"
-        android:text="@string/btn_continue"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:cornerRadius="28dp"
-        app:icon="@drawable/ic_arrow_forward"
-        app:iconGravity="textEnd"
-        app:iconPadding="8dp"
-        app:iconTint="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.89" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_icon_seller"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:background="@drawable/bg_circle_orange"
+                        android:contentDescription="@string/role_seller"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_store"
+                        app:tint="#D96B27" />
+
+                    <TextView
+                        android:id="@+id/tv_label_seller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/role_seller"
+                        android:textColor="#8C3B00"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="@string/role_seller_desc"
+                        android:textColor="#555555"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Continue Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_continue"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="#0E3818"
+                android:text="@string/btn_continue"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="28dp"
+                app:icon="@drawable/ic_arrow_forward"
+                app:iconGravity="textEnd"
+                app:iconPadding="8dp"
+                app:iconTint="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_seller" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Admin Login Text Action -->
     <LinearLayout
@@ -219,9 +232,7 @@
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.97">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/iv_icon_admin_lock"

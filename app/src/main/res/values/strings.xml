@@ -108,4 +108,5 @@
     <string name="hint_admin_email">name@craftlanka.com</string>
     <string name="encrypted_console_text">End-to-End Encrypted Console</string>
     <string name="copyright_text">© 2024 CraftLanka. All Rights Reserved.</string>
+    <string name="btn_skip">btn_skip</string>
 </resources>

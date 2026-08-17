@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
+import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
 import com.craftlanka.app.databinding.FragmentLanguageSelectionBinding
 import com.google.android.material.card.MaterialCardView
@@ -17,7 +19,6 @@ class LanguageSelectionFragment : Fragment() {
     private var _binding: FragmentLanguageSelectionBinding? = null
     private val binding get() = _binding!!
 
-    // Default selection: English
     private var selectedLanguageCode = "en"
 
     override fun onCreateView(
@@ -32,20 +33,19 @@ class LanguageSelectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Pre-select English card by default
-        selectLanguage("en")
+        // Read current language from preferences to highlight the correct card
+        val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        selectedLanguageCode = prefs.getString("selected_language", "en") ?: "en"
+        selectLanguage(selectedLanguageCode)
 
-        // Card Click Listeners
         binding.cardEnglish.setOnClickListener { selectLanguage("en") }
         binding.cardSinhala.setOnClickListener { selectLanguage("si") }
         binding.cardTamil.setOnClickListener { selectLanguage("ta") }
 
-        // Skip Button -> Save current/default language & proceed to RoleSelectionFragment
         binding.btnSkip.setOnClickListener {
             saveLanguageAndProceed(selectedLanguageCode)
         }
 
-        // Continue Button -> Save selected language & proceed to RoleSelectionFragment
         binding.btnContinue.setOnClickListener {
             saveLanguageAndProceed(selectedLanguageCode)
         }
@@ -54,17 +54,13 @@ class LanguageSelectionFragment : Fragment() {
     private fun selectLanguage(langCode: String) {
         selectedLanguageCode = langCode
 
-        // Update border stroke & icon tint states
+        // Update visual selection only
         updateCardStyle(binding.cardEnglish, binding.ivIconEnglish, langCode == "en")
         updateCardStyle(binding.cardSinhala, binding.ivIconSinhala, langCode == "si")
         updateCardStyle(binding.cardTamil, binding.ivIconTamil, langCode == "ta")
     }
 
-    private fun updateCardStyle(
-        card: MaterialCardView,
-        icon: ImageView,
-        isSelected: Boolean
-    ) {
+    private fun updateCardStyle(card: MaterialCardView, icon: ImageView, isSelected: Boolean) {
         if (isSelected) {
             val selectedColor = "#0E3818".toColorInt()
             card.strokeColor = selectedColor
@@ -80,18 +76,15 @@ class LanguageSelectionFragment : Fragment() {
     }
 
     private fun saveLanguageAndProceed(langCode: String) {
-        // 1. Save language setting to SharedPreferences
+        //1. Save to preferences
         val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         prefs.edit {
             putString("selected_language", langCode)
         }
 
-        // 2. Navigate to RoleSelectionFragment
-        val mainActivity = requireActivity() as MainActivity
-        mainActivity.navigationManager.replaceFragment(
-            fragment = RoleSelectionFragment(),
-            addToBackStack = false
-        )
+        // 2. Apply globally (This triggers an automatic Activity recreation)
+        val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(langCode)
+        AppCompatDelegate.setApplicationLocales(appLocale)
     }
 
     private fun dpToPx(dp: Int): Int {

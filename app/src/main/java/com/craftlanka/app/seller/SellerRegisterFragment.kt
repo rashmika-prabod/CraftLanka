@@ -21,7 +21,9 @@ import androidx.fragment.app.Fragment
 import com.craftlanka.app.MainActivity
 import com.craftlanka.app.R
 import com.craftlanka.app.buyer.RegistrationSuccessFragment
+import com.craftlanka.app.data.AuthRepository
 import com.craftlanka.app.databinding.FragmentSellerRegisterBinding
+import com.craftlanka.app.model.SellerProfile
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SellerRegisterFragment : Fragment() {
@@ -29,14 +31,21 @@ class SellerRegisterFragment : Fragment() {
     private var _binding: FragmentSellerRegisterBinding? = null
     private val binding get() = _binding!!
 
+    private val authRepository = AuthRepository()
+
     private var selectedImageUri: Uri? = null
 
-    // Direct Photo Picker Launcher
     private val photoPickerLauncher = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         if (uri != null) {
             selectedImageUri = uri
+            
+            // Fix: Clear the tint and padding so the photo fills the circle correctly
+            binding.ivSellerPhoto.imageTintList = null
+            binding.ivSellerPhoto.setPadding(0, 0, 0, 0)
+            
+            // Set the image and make it fill the circular card
             binding.ivSellerPhoto.setImageURI(uri)
             binding.ivSellerPhoto.scaleType = ImageView.ScaleType.CENTER_CROP
 
@@ -61,21 +70,13 @@ class SellerRegisterFragment : Fragment() {
 
         setupTermsText()
 
-        // Top Back Arrow Listener
         binding.btnBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        // Direct System Photo Picker Trigger
-        binding.fabUploadPhoto.setOnClickListener {
-            openPhotoPicker()
-        }
+        binding.fabUploadPhoto.setOnClickListener { openPhotoPicker() }
+        binding.cardSellerPhoto.setOnClickListener { openPhotoPicker() }
 
-        binding.cardSellerPhoto.setOnClickListener {
-            openPhotoPicker()
-        }
-
-        // Navigation to Seller Login from bottom prompt
         binding.btnGotoLogin.setOnClickListener {
             val mainActivity = requireActivity() as MainActivity
             mainActivity.navigationManager.replaceFragment(
@@ -84,23 +85,81 @@ class SellerRegisterFragment : Fragment() {
             )
         }
 
-        // Create Seller Account Action
         binding.btnCreateAccount.setOnClickListener {
             if (validateForm()) {
-                val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                prefs.edit {
-                    putString("user_role", "seller")
+                val ownerName = binding.etOwnerName.text.toString().trim()
+                val phone = binding.etPhone.text.toString().trim()
+                val businessName = binding.etBusinessName.text.toString().trim()
+                val addressNo = binding.etAddressNo.text.toString().trim()
+                val road = binding.etRoad.text.toString().trim()
+                val city = binding.etCity.text.toString().trim()
+                val country = binding.etCountry.text.toString().trim()
+                val email = binding.etEmail.text.toString().trim()
+                val password = binding.etPassword.text.toString().trim()
+
+                binding.btnCreateAccount.isEnabled = false
+                
+                if (selectedImageUri != null) {
+                    authRepository.uploadSellerPhoto(
+                        context = requireContext(),
+                        imageUri = selectedImageUri!!,
+                        onSuccess = { uploadedUrl ->
+                            val profile = SellerProfile(
+                                ownerName = ownerName,
+                                phone = phone,
+                                businessName = businessName,
+                                addressNo = addressNo,
+                                road = road,
+                                city = city,
+                                country = country,
+                                email = email,
+                                photoUrl = uploadedUrl
+                            )
+                            performRegistration(profile, password)
+                        },
+                        onFailure = { error ->
+                            binding.btnCreateAccount.isEnabled = true
+                            Toast.makeText(requireContext(), "Photo upload failed: $error", Toast.LENGTH_LONG).show()
+                        }
+                    )
+                } else {
+                    val profile = SellerProfile(
+                        ownerName = ownerName,
+                        phone = phone,
+                        businessName = businessName,
+                        addressNo = addressNo,
+                        road = road,
+                        city = city,
+                        country = country,
+                        email = email,
+                        photoUrl = ""
+                    )
+                    performRegistration(profile, password)
                 }
+            }
+        }
+    }
+
+    private fun performRegistration(profile: SellerProfile, password: String) {
+        authRepository.registerSeller(
+            profile = profile,
+            password = password,
+            onSuccess = {
+                val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                prefs.edit { putString("user_role", "seller") }
 
                 val shopButtonText = getString(R.string.btn_login_to_your_shop)
-
                 val mainActivity = requireActivity() as MainActivity
                 mainActivity.navigationManager.replaceFragment(
                     fragment = RegistrationSuccessFragment.newInstance(shopButtonText),
                     addToBackStack = false
                 )
+            },
+            onFailure = { errorMessage ->
+                binding.btnCreateAccount.isEnabled = true
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
             }
-        }
+        )
     }
 
     private fun openPhotoPicker() {

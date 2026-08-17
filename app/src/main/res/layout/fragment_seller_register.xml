@@ -104,10 +104,12 @@
                     app:strokeColor="#CBD7AF"
                     app:strokeWidth="1.5dp">
 
+                    <!-- Fixed: Use padding and match_parent to allow smooth transition to full photo -->
                     <ImageView
                         android:id="@+id/iv_seller_photo"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="24dp"
                         android:layout_gravity="center"
                         android:contentDescription="@string/seller_photo"
                         android:scaleType="fitCenter"

@@ -9,12 +9,16 @@ import android.widget.Toast
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.craftlanka.app.MainActivity
+import com.craftlanka.app.data.AuthRepository
 import com.craftlanka.app.databinding.FragmentSellerLoginBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class SellerLoginFragment : Fragment() {
 
     private var _binding: FragmentSellerLoginBinding? = null
     private val binding get() = _binding!!
+
+    private val authRepository = AuthRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,24 +35,13 @@ class SellerLoginFragment : Fragment() {
         // Login Action
         binding.btnLogin.setOnClickListener {
             if (validateInput()) {
-                val identifier = binding.etIdentifier.text.toString().trim()
-                val rememberMe = binding.cbRememberMe.isChecked
-
-                val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                prefs.edit {
-                    putString("logged_seller", identifier)
-                    putBoolean("seller_remember_me", rememberMe)
-                    putString("user_role", "seller")
-                }
-
-                Toast.makeText(requireContext(), "Seller login successful!", Toast.LENGTH_SHORT).show()
-                // TODO: Navigate to Seller Dashboard
+                performSellerLogin()
             }
         }
 
         // Forgot Password Action
         binding.btnForgotPassword.setOnClickListener {
-            Toast.makeText(requireContext(), "Forgot Password clicked", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Forgot Password feature coming soon", Toast.LENGTH_SHORT).show()
         }
 
         // Redirect to Seller Registration Screen
@@ -61,12 +54,57 @@ class SellerLoginFragment : Fragment() {
         }
     }
 
+    private fun performSellerLogin() {
+        val email = binding.etIdentifier.text.toString().trim()
+        val password = binding.etPassword.text.toString().trim()
+        val rememberMe = binding.cbRememberMe.isChecked
+
+        binding.btnLogin.isEnabled = false
+
+        // 1. Authenticate with Firebase
+        authRepository.loginUser(
+            email = email,
+            password = password,
+            onSuccess = { role ->
+                // 2. Check if the user is actually a seller
+                if (role == "seller") {
+                    val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                    
+                    // 3. Fetch the Seller Profile to get business name
+                    authRepository.getSellerProfile(uid) { profile ->
+                        val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                        prefs.edit {
+                            putString("logged_seller", email)
+                            putBoolean("seller_remember_me", rememberMe)
+                            putString("user_role", "seller")
+                            putString("seller_business_name", profile?.businessName ?: "")
+                        }
+
+                        val displayName = profile?.businessName ?: "Seller"
+                        Toast.makeText(requireContext(), "Welcome back, $displayName!", Toast.LENGTH_SHORT).show()
+                        
+                        binding.btnLogin.isEnabled = true
+                        // TODO: Navigate to Seller Dashboard (HomeFragment or DashboardFragment)
+                    }
+                } else {
+                    binding.btnLogin.isEnabled = true
+                    Toast.makeText(requireContext(), "This account is not a Seller account.", Toast.LENGTH_LONG).show()
+                    FirebaseAuth.getInstance().signOut()
+                }
+            },
+            onFailure = { errorMessage ->
+                binding.btnLogin.isEnabled = true
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+            }
+        )
+    }
+
     private fun validateInput(): Boolean {
         val identifier = binding.etIdentifier.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
 
         if (identifier.isEmpty()) {
-            binding.tilIdentifier.error = "Please enter your email or phone number"
+            binding.tilIdentifier.error = "Please enter your email"
             return false
         }
         binding.tilIdentifier.error = null

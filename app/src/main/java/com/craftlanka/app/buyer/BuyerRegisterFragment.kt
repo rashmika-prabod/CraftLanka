@@ -15,13 +15,18 @@ import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import com.craftlanka.app.MainActivity
+import com.craftlanka.app.data.AuthRepository
 import com.craftlanka.app.databinding.FragmentBuyerRegisterBinding
+import com.craftlanka.app.model.BuyerProfile
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class BuyerRegisterFragment : Fragment() {
 
     private var _binding: FragmentBuyerRegisterBinding? = null
     private val binding get() = _binding!!
+
+    // Step 4: Create a reference to our Auth Messenger
+    private val authRepository = AuthRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,28 +47,56 @@ class BuyerRegisterFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        // Redirect to Login Screen (commented out until LoginFragment is created)
+        // Redirect to Login Screen
         binding.btnGotoLogin.setOnClickListener {
-            // val mainActivity = requireActivity() as MainActivity
-            // mainActivity.navigationManager.replaceFragment(
-            //     fragment = LoginFragment(),
-            //     addToBackStack = false
-            // )
+            val mainActivity = requireActivity() as MainActivity
+            mainActivity.navigationManager.replaceFragment(
+                fragment = BuyerLoginFragment(),
+                addToBackStack = false
+            )
         }
 
         // Create Account Action
         binding.btnCreateAccount.setOnClickListener {
             if (validateForm()) {
-                val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                prefs.edit {
-                    putString("user_role", "buyer")
-                }
+                // 1. Get the values from the boxes
+                val fullName = binding.etFullName.text.toString().trim()
+                val email = binding.etEmail.text.toString().trim()
+                val phone = binding.etPhone.text.toString().trim()
+                val password = binding.etPassword.text.toString().trim()
 
-                // Navigate directly to RegistrationSuccessFragment
-                val mainActivity = requireActivity() as MainActivity
-                mainActivity.navigationManager.replaceFragment(
-                    fragment = RegistrationSuccessFragment(),
-                    addToBackStack = false
+                // 2. Create the Buyer Profile
+                val profile = BuyerProfile(
+                    fullName = fullName,
+                    email = email,
+                    phone = phone
+                )
+
+                // 3. Disable button so the user doesn't click twice
+                binding.btnCreateAccount.isEnabled = false
+
+                // 4. Tell the messenger to register the buyer in Firebase
+                authRepository.registerBuyer(
+                    profile = profile,
+                    password = password,
+                    onSuccess = {
+                        val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                        prefs.edit {
+                            putString("user_role", "buyer")
+                        }
+
+                        // Navigate directly to RegistrationSuccessFragment
+                        val mainActivity = requireActivity() as MainActivity
+                        mainActivity.navigationManager.replaceFragment(
+                            fragment = RegistrationSuccessFragment(),
+                            addToBackStack = false
+                        )
+                    },
+                    onFailure = { errorMessage ->
+                        // If it fails, let the user try again
+                        binding.btnCreateAccount.isEnabled = true
+                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+                    }
                 )
             }
         }

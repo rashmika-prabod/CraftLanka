@@ -13,17 +13,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         navigationManager = NavigationManager(supportFragmentManager, R.id.fragment_container)
 
-        if (savedInstanceState == null) {
-            navigationManager.replaceFragment(
-                fragment = SplashFragment(),
-                addToBackStack = false
-            )
-        }
+        // ALWAYS replace with SplashFragment on start/recreation
+        // to ensure the routing logic in SplashFragment runs.
+        navigationManager.replaceFragment(
+            fragment = SplashFragment(),
+            addToBackStack = false
+        )
     }
 }

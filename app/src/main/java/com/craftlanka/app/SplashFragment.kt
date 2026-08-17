@@ -31,9 +31,16 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            delay(2500) // Display splash screen animation for 2.5 seconds
+        // Safe programmatic Lottie setup
+        try {
+            binding.lottieAnimation.setAnimation(R.raw.loading_spinner)
+            binding.lottieAnimation.playAnimation()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
+        lifecycleScope.launch {
+            delay(2000)
             if (isAdded) {
                 navigateNextScreen()
             }
@@ -45,40 +52,18 @@ class SplashFragment : Fragment() {
         val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
         val userRole = prefs.getString("user_role", null)
+        val selectedLanguage = prefs.getString("selected_language", null)
 
         val targetFragment: Fragment = when (userRole) {
-            "admin" -> {
-                val isAdminLoggedIn = prefs.getBoolean("admin_is_logged_in", false)
-                if (isAdminLoggedIn) {
-                    // TODO: Replace with AdminDashboardFragment() when created
-                    AdminLoginFragment()
-                } else {
-                    AdminLoginFragment()
-                }
-            }
-            "seller" -> {
-                val isSellerRemembered = prefs.getBoolean("seller_remember_me", false)
-                val loggedSeller = prefs.getString("logged_seller", null)
-                if (isSellerRemembered && !loggedSeller.isNullOrEmpty()) {
-                    // TODO: Replace with SellerDashboardFragment() when created
-                    SellerLoginFragment()
-                } else {
-                    SellerLoginFragment()
-                }
-            }
-            "buyer" -> {
-                val isBuyerRemembered = prefs.getBoolean("remember_me", false)
-                val loggedBuyer = prefs.getString("logged_user", null)
-                if (isBuyerRemembered && !loggedBuyer.isNullOrEmpty()) {
-                    // TODO: Replace with BuyerDashboardFragment() / HomeFragment() when created
-                    BuyerLoginFragment()
-                } else {
-                    BuyerLoginFragment()
-                }
-            }
+            "admin" -> AdminLoginFragment()
+            "seller" -> SellerLoginFragment()
+            "buyer" -> BuyerLoginFragment()
             else -> {
-                // First-time launch or unselected role -> Onboarding Flow
-                OnboardingFragment()
+                if (selectedLanguage != null) {
+                    RoleSelectionFragment()
+                } else {
+                    OnboardingFragment()
+                }
             }
         }
 
