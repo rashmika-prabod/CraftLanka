@@ -1,0 +1,8 @@
+# Default repository owners
+*       @rashmika-prabod
+
+# Build scripts and workflow configurations
+/.github/workflows/   @rashmika-prabod
+/build.gradle.kts     @rashmika-prabod
+/app/build.gradle.kts @rashmika-prabod
+/gradle/              @rashmika-prabod

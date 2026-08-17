@@ -57,4 +57,114 @@
     <string name="product_2_name">Cedar &amp; Sage Soy Candle</string>
     <string name="product_2_details">by Ember Studios | Size: 12oz | Qty: 2</string>
     <string name="product_2_price">LKR 3,200</string>
+
+    <string name="craftlanka">CraftLanka</string>
+    <string name="handcrafted_with_pride">HANDCRAFTED WITH PRIDE</string>
+    <string name="connecting_sri_lankan_artisans_nwith_customers">Connecting Sri Lankan artisans\nwith customers</string>
+    <string name="heritage_of_sri_lanka">Heritage of Sri Lanka</string>
+    <string name="get_started">Get Started</string>
+    <string name="supporting_our_local_artisans_by_bringing_their_beautiful_handmade_heritage_directly_to_your_doorstep">Supporting our local artisans by bringing their beautiful, handmade heritage directly to your doorstep.</string>
+    <string name="buy_and_sell_authentic_sri_lankan_handicrafts_in_one_simple_marketplace">Buy and sell authentic Sri Lankan handicrafts in one simple marketplace.</string>
+    <string name="skip">Skip</string>
+    <string name="btn_continue">Continue</string>
+    <string name="tamil">Tamil</string>
+    <string name="sinhala">Sinhala</string>
+    <string name="english">English</string>
+    <string name="select_your_language">Select Your Language</string>
+    <string name="choose_the_language_you_are_most_comfortable_using_for_the_app">Choose the language you are most comfortable using for the app.</string>
+    <string name="choose_how_you_want_to_continue">Choose How You Want to Continue</string>
+    <string name="role_selection_subtitle">Select your role to help us personalize your experience in the Sri Lankan handicraft community.</string>
+    <string name="role_buyer">Buyer</string>
+    <string name="role_buyer_desc">Explore and purchase handmade crafts from across the island.</string>
+    <string name="role_seller">Seller</string>
+    <string name="role_seller_desc">Sell your handmade products easily and reach customers globally.</string>
+    <string name="admin_login">Admin Login</string>
+    <string name="create_buyer_account">Create Buyer Account</string>
+    <string name="buyer_register_subtitle">Join our community of handicraft enthusiasts and support local Sri Lankan artisans.</string>
+    <string name="hint_full_name">Enter your full name</string>
+    <string name="label_phone_number">Phone Number</string>
+    <string name="hint_phone_number">+94 XX XXX XXXX</string>
+    <string name="hint_password">Min. 8 characters</string>
+    <string name="hint_confirm_password">Re-enter password</string>
+    <string name="terms_agreement_part1">I agree to the </string>
+    <string name="terms_and_conditions">Terms &amp; Conditions</string>
+    <string name="terms_agreement_part2"> and </string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="btn_create_account">CREATE ACCOUNT</string>
+    <string name="already_have_account_question">Already have an account?</string>
+    <string name="action_login">LOGIN</string>
+    <string name="registration_successful">Registration Successful!</string>
+    <string name="btn_login_to_your_account">Login to Your Account</string>
+    <string name="back">Back</string>
+    <string name="email_nimal_com">email@nimal.com</string>
+    <string name="label_full_name">Full Name</string>
+    <string name="label_email">Email Address</string>
+    <string name="label_password">Password</string>
+    <string name="label_confirm_password">Confirm Password</string>
+
+    <!-- Seller Registration Strings -->
+    <string name="create_seller_account">Create Seller Account</string>
+    <string name="seller_register_subtitle">Join Sri Lanka\'s heritage marketplace</string>
+    <string name="seller_photo">Seller Photo</string>
+    <string name="section_personal_details">Personal Details</string>
+    <string name="label_owner_name">Owner Name</string>
+    <string name="hint_owner_name">Enter full name</string>
+    <string name="prefix_country_code">+94</string>
+    <string name="hint_phone_seller">77 123 4567</string>
+    <string name="section_business_details">Business Details</string>
+    <string name="label_business_name">Business Name</string>
+    <string name="hint_business_name">e.g. Galle Pottery Works</string>
+    <string name="label_address_no">Address No.</string>
+    <string name="hint_address_no">e.g. 42</string>
+    <string name="label_road">Road</string>
+    <string name="hint_road">e.g. Galle Road</string>
+    <string name="label_city">City</string>
+    <string name="hint_city">e.g. Galle</string>
+    <string name="label_country">Country</string>
+    <string name="hint_country">e.g. Sri Lanka</string>
+    <string name="section_account_security">Account Security</string>
+    <string name="hint_seller_email">name@example.com</string>
+    <string name="hint_repeat_password">Repeat password</string>
+    <string name="btn_create_seller_account">Create Seller Account</string>
+    <string name="already_have_seller_account">Already have a seller account?</string>
+    <string name="btn_login_to_your_shop">Login to Your Shop</string>
+    <string name="cd_back">Back</string>
+    <string name="back1">Back</string>
+    <string name="choose_profile_photo">Choose Profile Photo</string>
+    <string name="gallery_icon">Gallery Icon</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_photo">Choose Profile Photo</string>
+    <string name="galleryIcon">Gallery Icon</string>
+    <string name="chooseFromGallery">Choose from Gallery</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- Buyer Login Strings -->
+    <string name="welcome_back">Welcome Back</string>
+    <string name="buyer_login_subtitle">Reconnect with Sri Lanka\'s finest artisan heritage.</string>
+    <string name="label_email_or_phone">Email or Phone Number</string>
+    <string name="hint_email_or_phone">Enter your email or phone</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="btn_login">Login</string>
+    <string name="or_divider">OR</string>
+    <string name="btn_continue_with_google">Continue with Google</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="btn_login_create_account">Create Account</string>
+
+    <!-- Seller Login Strings -->
+    <string name="seller_login_title">Seller Login</string>
+    <string name="seller_login_subtitle">Manage your handmade craft business</string>
+    <string name="hint_seller_identifier">e.g. 0712345678</string>
+    <string name="new_seller_prompt">New Seller?</string>
+    <string name="secured_by_craft_council">Secured by Sri Lankan Craft Council</string>
+
+    <!-- Admin Login Strings -->
+    <string name="admin_login_title">Admin Login</string>
+    <string name="admin_login_subtitle">Secure administrator access</string>
+    <string name="label_admin_email">Admin Email</string>
+    <string name="hint_admin_email">name@craftlanka.com</string>
+    <string name="encrypted_console_text">End-to-End Encrypted Console</string>
+    <string name="copyright_text">© 2024 CraftLanka. All Rights Reserved.</string>
+    <string name="btn_skip">btn_skip</string>
 </resources>

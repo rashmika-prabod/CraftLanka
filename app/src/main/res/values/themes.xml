@@ -11,22 +11,21 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/header_forest_green</item>
         <item name="android:windowLightStatusBar">false</item>
-
         <item name="bottomNavigationStyle">@style/Widget.Material3.BottomNavigationView</item>
     </style>
-
     <style name="ActiveIndicatorPill" parent="">
         <item name="android:color">@color/mint_green</item>
         <item name="marginHorizontal">12dp</item>
     </style>
-
     <style name="RoundedSquare" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>
     </style>
-
     <style name="RoundedCorners" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
+    </style>
+    <style name="ShapeAppearance.App.Corner24dp" parent="ShapeAppearance.Material3.Corner.Medium">
+        <item name="cornerSize">24dp</item>
     </style>
 </resources>
