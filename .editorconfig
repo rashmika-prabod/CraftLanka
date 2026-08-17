@@ -2,6 +2,6 @@ root = true
 
 [*.{kt,kts}]
 ij_kotlin_allow_trailing_comma = true
-# Standard ktlint rule rule toggle
 ktlint_code_style = android
 ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_function-naming = disabled

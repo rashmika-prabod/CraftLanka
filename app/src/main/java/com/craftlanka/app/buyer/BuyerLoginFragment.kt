@@ -2,6 +2,7 @@ package com.craftlanka.app.buyer
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.craftlanka.app.BuildConfig
 import com.craftlanka.app.MainActivity
+import com.craftlanka.app.MainDisplay
 import com.craftlanka.app.RoleSelectionFragment
 import com.craftlanka.app.data.AuthRepository
 import com.craftlanka.app.databinding.FragmentBuyerLoginBinding
@@ -56,7 +58,8 @@ class BuyerLoginFragment : Fragment() {
                                     authRepository.getBuyerProfile(uid) { profile ->
                                         val name = profile?.fullName ?: "Buyer"
                                         Toast.makeText(requireContext(), "Welcome back, $name!", Toast.LENGTH_SHORT).show()
-                                        // TODO: Navigate to Buyer Dashboard
+
+                                        goToBuyerDashboard()
                                     }
                                 } else {
                                     // Wrong role: Sign out and inform user
@@ -153,7 +156,7 @@ class BuyerLoginFragment : Fragment() {
                         Toast.makeText(requireContext(), "Welcome back, $displayName!", Toast.LENGTH_SHORT).show()
 
                         binding.btnLogin.isEnabled = true
-                        // TODO: Navigate to Buyer Dashboard
+                        goToBuyerDashboard()
                     }
                 } else {
                     // Wrong role: Re-enable UI, sign out, and inform user
@@ -167,6 +170,18 @@ class BuyerLoginFragment : Fragment() {
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
             },
         )
+    }
+
+    /**
+     * Launches the existing customer-facing app (MainDisplay) and clears
+     * the login/onboarding back stack so pressing Back exits the app
+     * instead of returning to the login screen.
+     */
+    private fun goToBuyerDashboard() {
+        val intent = Intent(requireContext(), MainDisplay::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun validateInput(): Boolean {

@@ -192,14 +192,14 @@ class SellerRegisterFragment : Fragment() {
                         showPolicyDialog(
                             title = "Seller Terms & Conditions",
                             message =
-                                """
+                            """
                                 Welcome to CraftLanka Merchant Services! By creating a seller account, you agree to:
                                 
                                 1. List authentic, Sri Lankan handcrafted goods.
                                 2. Accurately represent product quality, origin, and crafting methods.
                                 3. Honor shipping deadlines and customer support commitments.
                                 4. Comply with CraftLanka marketplace commission structures and policies.
-                                """.trimIndent(),
+                            """.trimIndent(),
                         )
                     }
 
@@ -221,13 +221,13 @@ class SellerRegisterFragment : Fragment() {
                         showPolicyDialog(
                             title = "CraftLanka Seller Privacy Policy",
                             message =
-                                """
+                            """
                                 CraftLanka Merchant Privacy Notice:
                                 
                                 1. Business registration data is stored securely to process store verification.
                                 2. Payment processing details are handled through encrypted financial gateways.
                                 3. Customer order data must be used strictly for order fulfillment.
-                                """.trimIndent(),
+                            """.trimIndent(),
                         )
                     }
 
