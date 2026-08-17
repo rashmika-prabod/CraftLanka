@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <!-- Top Drag Handle -->
+        <View
+            android:id="@+id/dragHandle"
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:background="@color/light_gray_pill"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Warning Header -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvWarningIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="@color/warning_bg"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dragHandle"
+            app:strokeWidth="0dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/stat_sys_warning"
+                app:tint="@color/danger_red"
+                android:contentDescription="Warning" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tvCancelTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Cancel This Order?"
+            android:textColor="@color/charcoal"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cvWarningIcon" />
+
+        <TextView
+            android:id="@+id/tvCancelSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="This action cannot be undone. Funds will be returned according to the refund policy."
+            android:textColor="@color/muted_gray"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCancelTitle" />
+
+        <!-- Order Banner Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvOrderBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@color/light_gray"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:layout_constraintTop_toBottomOf="@id/tvCancelSubtitle">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvOrderBannerId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="#ORD-0042"
+                    android:textColor="@color/charcoal"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvOrderBannerAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LKR 3,500.00"
+                    android:textColor="@color/dark_green"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Select Reason Section -->
+        <TextView
+            android:id="@+id/tvReasonLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="SELECT REASON"
+            android:textColor="@color/muted_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cvOrderBanner" />
+
+        <RadioGroup
+            android:id="@+id/rgReasons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/tvReasonLabel">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/rbRequested"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_card_white"
+                android:padding="12dp"
+                android:text="Customer requested cancellation"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/rbStock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_card_white"
+                android:padding="12dp"
+                android:text="Item out of stock"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/rbPayment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_card_white"
+                android:padding="12dp"
+                android:text="Payment issue"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/rbOther"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_white"
+                android:padding="12dp"
+                android:text="Other"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle" />
+        </RadioGroup>
+
+        <!-- Other Reason Detail -->
+        <LinearLayout
+            android:id="@+id/llOtherDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/rgReasons">
+
+            <EditText
+                android:id="@+id/etOtherReason"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/bg_card_white"
+                android:gravity="top"
+                android:hint="Please specify details..."
+                android:padding="12dp"
+                android:textSize="14sp"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine" />
+
+            <TextView
+                android:id="@+id/tvCharCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="4dp"
+                android:text="0/200"
+                android:textColor="@color/muted_gray"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Refund Details Section -->
+        <TextView
+            android:id="@+id/tvRefundLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="REFUND DETAILS"
+            android:textColor="@color/muted_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llOtherDetail" />
+
+        <LinearLayout
+            android:id="@+id/llRefundBadge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_badge_mint"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/tvRefundLabel">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_cash"
+                app:tint="@color/dark_green"
+                android:contentDescription="Refund" />
+
+            <TextView
+                android:id="@+id/tvRefundAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Refund Amount: LKR 3,500.00"
+                android:textColor="@color/charcoal"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRefundTo"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Refund To"
+            app:layout_constraintTop_toBottomOf="@id/llRefundBadge">
+
+            <AutoCompleteTextView
+                android:id="@+id/actvRefundMethod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:text="Manual bank transfer"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilAccountHolder"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Account Holder Name"
+            app:layout_constraintTop_toBottomOf="@id/tilRefundTo">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etAccountHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Toggles Row -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clEmailToggle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/tilAccountHolder">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Send refund confirmation email"
+                android:textColor="@color/charcoal"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/swEmail"
+                app:layout_constraintEnd_toStartOf="@id/swEmail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/swEmail" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvStockToggle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toBottomOf="@id/clEmailToggle"
+            app:strokeWidth="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
+
+                <ImageView
+                    android:id="@+id/ivStockIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_home"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/muted_gray"
+                    android:contentDescription="Stock" />
+
+                <TextView
+                    android:id="@+id/tvStockLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Return items to stock"
+                    android:textColor="@color/charcoal"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@id/swStock"
+                    app:layout_constraintStart_toEndOf="@id/ivStockIcon"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Available for sellers only"
+                    android:textColor="@color/muted_gray"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toStartOf="@id/swStock"
+                    app:layout_constraintStart_toStartOf="@id/tvStockLabel"
+                    app:layout_constraintTop_toBottomOf="@id/tvStockLabel" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/swStock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Confirmation Checkbox -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvConfirmCheckbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toBottomOf="@id/cvStockToggle"
+            app:strokeColor="@color/light_gray_pill"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <CheckBox
+                    android:id="@+id/cbUnderstand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="I understand this order will be permanently cancelled and this action cannot be reversed."
+                    android:textColor="@color/charcoal"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Action Buttons -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConfirmCancel"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/danger_red"
+            android:text="Confirm Cancellation"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:cornerRadius="12dp"
+            app:layout_constraintTop_toBottomOf="@id/cvConfirmCheckbox" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnKeepOrder"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:text="Keep Order"
+            android:textAllCaps="false"
+            android:textColor="@color/charcoal"
+            app:cornerRadius="12dp"
+            app:layout_constraintTop_toBottomOf="@id/btnConfirmCancel"
+            app:strokeColor="@color/light_gray_pill" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
