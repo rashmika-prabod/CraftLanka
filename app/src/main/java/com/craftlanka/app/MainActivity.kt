@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.craftlanka.app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
 
     lateinit var navigationManager: NavigationManager
@@ -22,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         // to ensure the routing logic in SplashFragment runs.
         navigationManager.replaceFragment(
             fragment = SplashFragment(),
-            addToBackStack = false
+            addToBackStack = false,
         )
     }
 }

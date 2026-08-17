@@ -5,5 +5,5 @@ data class BuyerProfile(
     val fullName: String = "",
     val email: String = "",
     val phone: String = "",
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
 )

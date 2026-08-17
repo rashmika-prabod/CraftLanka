@@ -8,20 +8,22 @@ import androidx.fragment.app.Fragment
 import com.craftlanka.app.databinding.FragmentOnboardingBinding
 
 class OnboardingFragment : Fragment() {
-
-    private var _binding: FragmentOnboardingBinding? = null
-    private val binding get() = _binding!!
+    private var bindingVar: FragmentOnboardingBinding? = null
+    private val binding get() = bindingVar!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentOnboardingBinding.inflate(inflater, container, false)
+        bindingVar = FragmentOnboardingBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         // Handle Get Started button click -> navigate to Language Selection
@@ -41,12 +43,12 @@ class OnboardingFragment : Fragment() {
         // Route to LanguageSelectionFragment
         mainActivity.navigationManager.replaceFragment(
             fragment = LanguageSelectionFragment(),
-            addToBackStack = false
+            addToBackStack = false,
         )
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        bindingVar = null
     }
 }

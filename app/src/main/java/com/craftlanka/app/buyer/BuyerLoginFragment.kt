@@ -22,9 +22,8 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 
 class BuyerLoginFragment : Fragment() {
-
-    private var _binding: FragmentBuyerLoginBinding? = null
-    private val binding get() = _binding!!
+    private var bindingVar: FragmentBuyerLoginBinding? = null
+    private val binding get() = bindingVar!!
 
     private val authRepository = AuthRepository()
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -32,66 +31,75 @@ class BuyerLoginFragment : Fragment() {
     // Safely loaded from BuildConfig generated via local.properties
     private val webClientId = BuildConfig.WEB_CLIENT_ID
 
-    private val googleSignInLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                val idToken = account?.idToken
-                if (idToken != null) {
-                    authRepository.signInWithGoogle(
-                        idToken = idToken,
-                        targetRole = "buyer",
-                        onSuccess = { role: String ->
-                            // FIX: Verify user role is "buyer"
-                            if (role == "buyer") {
-                                val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                                prefs.edit { putString("user_role", role) }
-                                
-                                Toast.makeText(requireContext(), "Google Sign-In successful!", Toast.LENGTH_SHORT).show()
-                                
-                                val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-                                authRepository.getBuyerProfile(uid) { profile ->
-                                    val name = profile?.fullName ?: "Buyer"
-                                    Toast.makeText(requireContext(), "Welcome back, $name!", Toast.LENGTH_SHORT).show()
-                                    // TODO: Navigate to Buyer Dashboard
+    private val googleSignInLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    val idToken = account?.idToken
+                    if (idToken != null) {
+                        authRepository.signInWithGoogle(
+                            idToken = idToken,
+                            targetRole = "buyer",
+                            onSuccess = { role: String ->
+                                // FIX: Verify user role is "buyer"
+                                if (role == "buyer") {
+                                    val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                                    prefs.edit { putString("user_role", role) }
+
+                                    Toast.makeText(requireContext(), "Google Sign-In successful!", Toast.LENGTH_SHORT).show()
+
+                                    val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                                    authRepository.getBuyerProfile(uid) { profile ->
+                                        val name = profile?.fullName ?: "Buyer"
+                                        Toast.makeText(requireContext(), "Welcome back, $name!", Toast.LENGTH_SHORT).show()
+                                        // TODO: Navigate to Buyer Dashboard
+                                    }
+                                } else {
+                                    // Wrong role: Sign out and inform user
+                                    FirebaseAuth.getInstance().signOut()
+                                    googleSignInClient.signOut()
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "This is not a Buyer account. Please use Seller Login.",
+                                        Toast.LENGTH_LONG,
+                                    ).show()
                                 }
-                            } else {
-                                // Wrong role: Sign out and inform user
-                                FirebaseAuth.getInstance().signOut()
-                                googleSignInClient.signOut()
-                                Toast.makeText(requireContext(), "This is not a Buyer account. Please use Seller Login.", Toast.LENGTH_LONG).show()
-                            }
-                        },
-                        onFailure = { error: String ->
-                            Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
-                        }
-                    )
+                            },
+                            onFailure = { error: String ->
+                                Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+                            },
+                        )
+                    }
+                } catch (e: ApiException) {
+                    Toast.makeText(requireContext(), "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: ApiException) {
-                Toast.makeText(requireContext(), "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentBuyerLoginBinding.inflate(inflater, container, false)
+        bindingVar = FragmentBuyerLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(webClientId)
-            .requestEmail()
-            .build()
+        val gso =
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(webClientId)
+                .requestEmail()
+                .build()
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
         // Google Sign-In Action
@@ -112,7 +120,7 @@ class BuyerLoginFragment : Fragment() {
             val mainActivity = requireActivity() as MainActivity
             mainActivity.navigationManager.replaceFragment(
                 fragment = RoleSelectionFragment(),
-                addToBackStack = true
+                addToBackStack = true,
             )
         }
     }
@@ -131,7 +139,7 @@ class BuyerLoginFragment : Fragment() {
                 // FIX: Verify user role is "buyer"
                 if (role == "buyer") {
                     val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-                    
+
                     authRepository.getBuyerProfile(uid) { profile ->
                         val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
                         prefs.edit {
@@ -143,7 +151,7 @@ class BuyerLoginFragment : Fragment() {
 
                         val displayName = profile?.fullName ?: "Buyer"
                         Toast.makeText(requireContext(), "Welcome back, $displayName!", Toast.LENGTH_SHORT).show()
-                        
+
                         binding.btnLogin.isEnabled = true
                         // TODO: Navigate to Buyer Dashboard
                     }
@@ -157,7 +165,7 @@ class BuyerLoginFragment : Fragment() {
             onFailure = { errorMessage: String ->
                 binding.btnLogin.isEnabled = true
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
-            }
+            },
         )
     }
 
@@ -182,6 +190,6 @@ class BuyerLoginFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        bindingVar = null
     }
 }

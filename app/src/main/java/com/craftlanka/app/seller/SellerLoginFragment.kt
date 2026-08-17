@@ -14,22 +14,24 @@ import com.craftlanka.app.databinding.FragmentSellerLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class SellerLoginFragment : Fragment() {
-
-    private var _binding: FragmentSellerLoginBinding? = null
-    private val binding get() = _binding!!
+    private var bindingVar: FragmentSellerLoginBinding? = null
+    private val binding get() = bindingVar!!
 
     private val authRepository = AuthRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentSellerLoginBinding.inflate(inflater, container, false)
+        bindingVar = FragmentSellerLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         // Login Action
@@ -49,7 +51,7 @@ class SellerLoginFragment : Fragment() {
             val mainActivity = requireActivity() as MainActivity
             mainActivity.navigationManager.replaceFragment(
                 fragment = SellerRegisterFragment(),
-                addToBackStack = true
+                addToBackStack = true,
             )
         }
     }
@@ -69,7 +71,7 @@ class SellerLoginFragment : Fragment() {
                 // 2. Check if the user is actually a seller
                 if (role == "seller") {
                     val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-                    
+
                     // 3. Fetch the Seller Profile to get business name
                     authRepository.getSellerProfile(uid) { profile ->
                         val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -82,7 +84,7 @@ class SellerLoginFragment : Fragment() {
 
                         val displayName = profile?.businessName ?: "Seller"
                         Toast.makeText(requireContext(), "Welcome back, $displayName!", Toast.LENGTH_SHORT).show()
-                        
+
                         binding.btnLogin.isEnabled = true
                         // TODO: Navigate to Seller Dashboard (HomeFragment or DashboardFragment)
                     }
@@ -95,7 +97,7 @@ class SellerLoginFragment : Fragment() {
             onFailure = { errorMessage ->
                 binding.btnLogin.isEnabled = true
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
-            }
+            },
         )
     }
 
@@ -120,6 +122,6 @@ class SellerLoginFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        bindingVar = null
     }
 }

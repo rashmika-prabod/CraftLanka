@@ -11,20 +11,22 @@ import androidx.fragment.app.Fragment
 import com.craftlanka.app.databinding.FragmentAdminLoginBinding
 
 class AdminLoginFragment : Fragment() {
-
-    private var _binding: FragmentAdminLoginBinding? = null
-    private val binding get() = _binding!!
+    private var bindingVar: FragmentAdminLoginBinding? = null
+    private val binding get() = bindingVar!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentAdminLoginBinding.inflate(inflater, container, false)
+        bindingVar = FragmentAdminLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         // Login Button Listener
@@ -77,6 +79,6 @@ class AdminLoginFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        bindingVar = null
     }
 }

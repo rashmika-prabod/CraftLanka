@@ -7,8 +7,10 @@ import android.os.LocaleList
 import java.util.Locale
 
 object LocaleHelper {
-
-    fun applyLanguage(context: Context, languageCode: String) {
+    fun applyLanguage(
+        context: Context,
+        languageCode: String,
+    ) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
 
@@ -26,7 +28,10 @@ object LocaleHelper {
         resources.updateConfiguration(config, resources.displayMetrics)
     }
 
-    fun setLocale(context: Context, languageCode: String): Context {
+    fun setLocale(
+        context: Context,
+        languageCode: String,
+    ): Context {
         applyLanguage(context, languageCode)
         val locale = Locale(languageCode)
         val config = Configuration(context.resources.configuration)

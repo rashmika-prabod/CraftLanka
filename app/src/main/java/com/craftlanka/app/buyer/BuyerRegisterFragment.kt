@@ -21,9 +21,8 @@ import com.craftlanka.app.model.BuyerProfile
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class BuyerRegisterFragment : Fragment() {
-
-    private var _binding: FragmentBuyerRegisterBinding? = null
-    private val binding get() = _binding!!
+    private var bindingVar: FragmentBuyerRegisterBinding? = null
+    private val binding get() = bindingVar!!
 
     // Step 4: Create a reference to our Auth Messenger
     private val authRepository = AuthRepository()
@@ -31,13 +30,16 @@ class BuyerRegisterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentBuyerRegisterBinding.inflate(inflater, container, false)
+        bindingVar = FragmentBuyerRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         setupTermsText()
@@ -52,7 +54,7 @@ class BuyerRegisterFragment : Fragment() {
             val mainActivity = requireActivity() as MainActivity
             mainActivity.navigationManager.replaceFragment(
                 fragment = BuyerLoginFragment(),
-                addToBackStack = false
+                addToBackStack = false,
             )
         }
 
@@ -66,11 +68,12 @@ class BuyerRegisterFragment : Fragment() {
                 val password = binding.etPassword.text.toString().trim()
 
                 // 2. Create the Buyer Profile
-                val profile = BuyerProfile(
-                    fullName = fullName,
-                    email = email,
-                    phone = phone
-                )
+                val profile =
+                    BuyerProfile(
+                        fullName = fullName,
+                        email = email,
+                        phone = phone,
+                    )
 
                 // 3. Disable button so the user doesn't click twice
                 binding.btnCreateAccount.isEnabled = false
@@ -89,14 +92,14 @@ class BuyerRegisterFragment : Fragment() {
                         val mainActivity = requireActivity() as MainActivity
                         mainActivity.navigationManager.replaceFragment(
                             fragment = RegistrationSuccessFragment(),
-                            addToBackStack = false
+                            addToBackStack = false,
                         )
                     },
                     onFailure = { errorMessage ->
                         // If it fails, let the user try again
                         binding.btnCreateAccount.isEnabled = true
                         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
-                    }
+                    },
                 )
             }
         }
@@ -111,27 +114,29 @@ class BuyerRegisterFragment : Fragment() {
         val termsStart = fullText.indexOf("Terms & Conditions")
         if (termsStart != -1) {
             val termsEnd = termsStart + "Terms & Conditions".length
-            val termsClickable = object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    showPolicyDialog(
-                        title = "Terms & Conditions",
-                        message = """
-                            Welcome to CraftLanka! By registering as a buyer, you agree to:
-                            
-                            1. Maintain valid account credentials.
-                            2. Engage respectfully with local Sri Lankan artisans.
-                            3. Honor completed transaction agreements and orders.
-                            4. Use the platform in accordance with local laws and regulations.
-                        """.trimIndent()
-                    )
-                }
+            val termsClickable =
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        showPolicyDialog(
+                            title = "Terms & Conditions",
+                            message =
+                                """
+                                Welcome to CraftLanka! By registering as a buyer, you agree to:
+                                
+                                1. Maintain valid account credentials.
+                                2. Engage respectfully with local Sri Lankan artisans.
+                                3. Honor completed transaction agreements and orders.
+                                4. Use the platform in accordance with local laws and regulations.
+                                """.trimIndent(),
+                        )
+                    }
 
-                override fun updateDrawState(ds: TextPaint) {
-                    super.updateDrawState(ds)
-                    ds.color = brandBrown
-                    ds.isUnderlineText = true
+                    override fun updateDrawState(ds: TextPaint) {
+                        super.updateDrawState(ds)
+                        ds.color = brandBrown
+                        ds.isUnderlineText = true
+                    }
                 }
-            }
             spannable.setSpan(termsClickable, termsStart, termsEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
@@ -139,26 +144,28 @@ class BuyerRegisterFragment : Fragment() {
         val privacyStart = fullText.indexOf("Privacy Policy")
         if (privacyStart != -1) {
             val privacyEnd = privacyStart + "Privacy Policy".length
-            val privacyClickable = object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    showPolicyDialog(
-                        title = "Privacy Policy",
-                        message = """
-                            CraftLanka respects your privacy:
-                            
-                            1. We collect minimal information (Name, Email, Phone) necessary to fulfill orders.
-                            2. Your data is encrypted and secure.
-                            3. We never share your personal information with third parties without your explicit consent.
-                        """.trimIndent()
-                    )
-                }
+            val privacyClickable =
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        showPolicyDialog(
+                            title = "Privacy Policy",
+                            message =
+                                """
+                                CraftLanka respects your privacy:
+                                
+                                1. We collect minimal information (Name, Email, Phone) necessary to fulfill orders.
+                                2. Your data is encrypted and secure.
+                                3. We never share your personal information with third parties without your explicit consent.
+                                """.trimIndent(),
+                        )
+                    }
 
-                override fun updateDrawState(ds: TextPaint) {
-                    super.updateDrawState(ds)
-                    ds.color = brandBrown
-                    ds.isUnderlineText = true
+                    override fun updateDrawState(ds: TextPaint) {
+                        super.updateDrawState(ds)
+                        ds.color = brandBrown
+                        ds.isUnderlineText = true
+                    }
                 }
-            }
             spannable.setSpan(privacyClickable, privacyStart, privacyEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
@@ -166,7 +173,10 @@ class BuyerRegisterFragment : Fragment() {
         binding.tvTermsPolicy.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    private fun showPolicyDialog(title: String, message: String) {
+    private fun showPolicyDialog(
+        title: String,
+        message: String,
+    ) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
@@ -221,6 +231,6 @@ class BuyerRegisterFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        bindingVar = null
     }
 }

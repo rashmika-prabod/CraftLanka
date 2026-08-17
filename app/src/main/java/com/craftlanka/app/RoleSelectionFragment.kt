@@ -15,9 +15,8 @@ import com.craftlanka.app.seller.SellerRegisterFragment
 import com.google.android.material.card.MaterialCardView
 
 class RoleSelectionFragment : Fragment() {
-
-    private var _binding: FragmentRoleSelectionBinding? = null
-    private val binding get() = _binding!!
+    private var bindingVar: FragmentRoleSelectionBinding? = null
+    private val binding get() = bindingVar!!
 
     // Default role: buyer
     private var selectedRole = "buyer"
@@ -25,13 +24,16 @@ class RoleSelectionFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentRoleSelectionBinding.inflate(inflater, container, false)
+        bindingVar = FragmentRoleSelectionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         // Highlight buyer card by default
@@ -56,7 +58,7 @@ class RoleSelectionFragment : Fragment() {
             val mainActivity = requireActivity() as MainActivity
             mainActivity.navigationManager.replaceFragment(
                 fragment = AdminLoginFragment(),
-                addToBackStack = true
+                addToBackStack = true,
             )
         }
     }
@@ -67,7 +69,10 @@ class RoleSelectionFragment : Fragment() {
         updateCardStyle(binding.cardSeller, role == "seller")
     }
 
-    private fun updateCardStyle(card: MaterialCardView, isSelected: Boolean) {
+    private fun updateCardStyle(
+        card: MaterialCardView,
+        isSelected: Boolean,
+    ) {
         if (isSelected) {
             card.strokeColor = "#0E3818".toColorInt()
             card.strokeWidth = dpToPx(2)
@@ -87,12 +92,12 @@ class RoleSelectionFragment : Fragment() {
         if (role == "buyer") {
             mainActivity.navigationManager.replaceFragment(
                 fragment = BuyerRegisterFragment(),
-                addToBackStack = true
+                addToBackStack = true,
             )
         } else {
             mainActivity.navigationManager.replaceFragment(
                 fragment = SellerRegisterFragment(),
-                addToBackStack = true
+                addToBackStack = true,
             )
         }
     }
@@ -103,6 +108,6 @@ class RoleSelectionFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        bindingVar = null
     }
 }

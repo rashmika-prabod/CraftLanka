@@ -8,6 +8,7 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,45 +28,46 @@ import com.craftlanka.app.model.SellerProfile
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SellerRegisterFragment : Fragment() {
-
-    private var _binding: FragmentSellerRegisterBinding? = null
-    private val binding get() = _binding!!
+    private var bindingVar: FragmentSellerRegisterBinding? = null
+    private val binding get() = bindingVar!!
 
     private val authRepository = AuthRepository()
 
     private var selectedImageUri: Uri? = null
 
-    private val photoPickerLauncher = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        if (uri != null) {
-            selectedImageUri = uri
-            
-            // Fix: Clear the tint and padding so the photo fills the circle correctly
-            binding.ivSellerPhoto.imageTintList = null
-            binding.ivSellerPhoto.setPadding(0, 0, 0, 0)
-            
-            // Set the image and make it fill the circular card
-            binding.ivSellerPhoto.setImageURI(uri)
-            binding.ivSellerPhoto.scaleType = ImageView.ScaleType.CENTER_CROP
+    private val photoPickerLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.PickVisualMedia(),
+        ) { uri: Uri? ->
+            if (uri != null) {
+                selectedImageUri = uri
 
-            val params = binding.ivSellerPhoto.layoutParams
-            params.width = ViewGroup.LayoutParams.MATCH_PARENT
-            params.height = ViewGroup.LayoutParams.MATCH_PARENT
-            binding.ivSellerPhoto.layoutParams = params
+                binding.ivSellerPhoto.imageTintList = null
+                binding.ivSellerPhoto.setPadding(0, 0, 0, 0)
+
+                binding.ivSellerPhoto.setImageURI(uri)
+                binding.ivSellerPhoto.scaleType = ImageView.ScaleType.CENTER_CROP
+
+                val params = binding.ivSellerPhoto.layoutParams
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT
+                params.height = ViewGroup.LayoutParams.MATCH_PARENT
+                binding.ivSellerPhoto.layoutParams = params
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentSellerRegisterBinding.inflate(inflater, container, false)
+        bindingVar = FragmentSellerRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         setupTermsText()
@@ -81,7 +83,7 @@ class SellerRegisterFragment : Fragment() {
             val mainActivity = requireActivity() as MainActivity
             mainActivity.navigationManager.replaceFragment(
                 fragment = SellerLoginFragment(),
-                addToBackStack = true
+                addToBackStack = true,
             )
         }
 
@@ -98,49 +100,57 @@ class SellerRegisterFragment : Fragment() {
                 val password = binding.etPassword.text.toString().trim()
 
                 binding.btnCreateAccount.isEnabled = false
-                
+
                 if (selectedImageUri != null) {
                     authRepository.uploadSellerPhoto(
                         context = requireContext(),
                         imageUri = selectedImageUri!!,
                         onSuccess = { uploadedUrl ->
-                            val profile = SellerProfile(
-                                ownerName = ownerName,
-                                phone = phone,
-                                businessName = businessName,
-                                addressNo = addressNo,
-                                road = road,
-                                city = city,
-                                country = country,
-                                email = email,
-                                photoUrl = uploadedUrl
-                            )
+                            Log.d("SellerRegister", "Cloudinary Upload Success: $uploadedUrl")
+
+                            val profile =
+                                SellerProfile(
+                                    ownerName = ownerName,
+                                    phone = phone,
+                                    businessName = businessName,
+                                    addressNo = addressNo,
+                                    road = road,
+                                    city = city,
+                                    country = country,
+                                    email = email,
+                                    photoUrl = uploadedUrl,
+                                )
                             performRegistration(profile, password)
                         },
                         onFailure = { error ->
                             binding.btnCreateAccount.isEnabled = true
+                            Log.e("SellerRegister", "Cloudinary Upload Failed: $error")
                             Toast.makeText(requireContext(), "Photo upload failed: $error", Toast.LENGTH_LONG).show()
-                        }
+                        },
                     )
                 } else {
-                    val profile = SellerProfile(
-                        ownerName = ownerName,
-                        phone = phone,
-                        businessName = businessName,
-                        addressNo = addressNo,
-                        road = road,
-                        city = city,
-                        country = country,
-                        email = email,
-                        photoUrl = ""
-                    )
+                    val profile =
+                        SellerProfile(
+                            ownerName = ownerName,
+                            phone = phone,
+                            businessName = businessName,
+                            addressNo = addressNo,
+                            road = road,
+                            city = city,
+                            country = country,
+                            email = email,
+                            photoUrl = "",
+                        )
                     performRegistration(profile, password)
                 }
             }
         }
     }
 
-    private fun performRegistration(profile: SellerProfile, password: String) {
+    private fun performRegistration(
+        profile: SellerProfile,
+        password: String,
+    ) {
         authRepository.registerSeller(
             profile = profile,
             password = password,
@@ -152,19 +162,19 @@ class SellerRegisterFragment : Fragment() {
                 val mainActivity = requireActivity() as MainActivity
                 mainActivity.navigationManager.replaceFragment(
                     fragment = RegistrationSuccessFragment.newInstance(shopButtonText),
-                    addToBackStack = false
+                    addToBackStack = false,
                 )
             },
             onFailure = { errorMessage ->
                 binding.btnCreateAccount.isEnabled = true
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
-            }
+            },
         )
     }
 
     private fun openPhotoPicker() {
         photoPickerLauncher.launch(
-            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
         )
     }
 
@@ -176,53 +186,57 @@ class SellerRegisterFragment : Fragment() {
         val termsStart = fullText.indexOf("Terms & Conditions")
         if (termsStart != -1) {
             val termsEnd = termsStart + "Terms & Conditions".length
-            val termsClickable = object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    showPolicyDialog(
-                        title = "Seller Terms & Conditions",
-                        message = """
-                            Welcome to CraftLanka Merchant Services! By creating a seller account, you agree to:
-                            
-                            1. List authentic, Sri Lankan handcrafted goods.
-                            2. Accurately represent product quality, origin, and crafting methods.
-                            3. Honor shipping deadlines and customer support commitments.
-                            4. Comply with CraftLanka marketplace commission structures and policies.
-                        """.trimIndent()
-                    )
-                }
+            val termsClickable =
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        showPolicyDialog(
+                            title = "Seller Terms & Conditions",
+                            message =
+                                """
+                                Welcome to CraftLanka Merchant Services! By creating a seller account, you agree to:
+                                
+                                1. List authentic, Sri Lankan handcrafted goods.
+                                2. Accurately represent product quality, origin, and crafting methods.
+                                3. Honor shipping deadlines and customer support commitments.
+                                4. Comply with CraftLanka marketplace commission structures and policies.
+                                """.trimIndent(),
+                        )
+                    }
 
-                override fun updateDrawState(ds: TextPaint) {
-                    super.updateDrawState(ds)
-                    ds.color = brandBrown
-                    ds.isUnderlineText = true
+                    override fun updateDrawState(ds: TextPaint) {
+                        super.updateDrawState(ds)
+                        ds.color = brandBrown
+                        ds.isUnderlineText = true
+                    }
                 }
-            }
             spannable.setSpan(termsClickable, termsStart, termsEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         val privacyStart = fullText.indexOf("privacy policy")
         if (privacyStart != -1) {
             val privacyEnd = privacyStart + "privacy policy".length
-            val privacyClickable = object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    showPolicyDialog(
-                        title = "CraftLanka Seller Privacy Policy",
-                        message = """
-                            CraftLanka Merchant Privacy Notice:
-                            
-                            1. Business registration data is stored securely to process store verification.
-                            2. Payment processing details are handled through encrypted financial gateways.
-                            3. Customer order data must be used strictly for order fulfillment.
-                        """.trimIndent()
-                    )
-                }
+            val privacyClickable =
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        showPolicyDialog(
+                            title = "CraftLanka Seller Privacy Policy",
+                            message =
+                                """
+                                CraftLanka Merchant Privacy Notice:
+                                
+                                1. Business registration data is stored securely to process store verification.
+                                2. Payment processing details are handled through encrypted financial gateways.
+                                3. Customer order data must be used strictly for order fulfillment.
+                                """.trimIndent(),
+                        )
+                    }
 
-                override fun updateDrawState(ds: TextPaint) {
-                    super.updateDrawState(ds)
-                    ds.color = brandBrown
-                    ds.isUnderlineText = true
+                    override fun updateDrawState(ds: TextPaint) {
+                        super.updateDrawState(ds)
+                        ds.color = brandBrown
+                        ds.isUnderlineText = true
+                    }
                 }
-            }
             spannable.setSpan(privacyClickable, privacyStart, privacyEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
@@ -230,7 +244,10 @@ class SellerRegisterFragment : Fragment() {
         binding.tvTermsPolicy.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    private fun showPolicyDialog(title: String, message: String) {
+    private fun showPolicyDialog(
+        title: String,
+        message: String,
+    ) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
@@ -320,6 +337,6 @@ class SellerRegisterFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        bindingVar = null
     }
 }

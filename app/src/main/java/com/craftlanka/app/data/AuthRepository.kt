@@ -14,7 +14,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AuthRepository {
-
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -24,7 +23,7 @@ class AuthRepository {
         idToken: String,
         targetRole: String, // "buyer" or "seller"
         onSuccess: (String) -> Unit, // returns user role
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
@@ -59,13 +58,13 @@ class AuthRepository {
         profile: BuyerProfile,
         password: String,
         onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         auth.createUserWithEmailAndPassword(profile.email, password)
             .addOnSuccessListener { authResult ->
                 val uid = authResult.user?.uid ?: ""
                 val finalProfile = profile.copy(uid = uid)
-                
+
                 db.collection("buyer_profiles").document(uid).set(finalProfile)
                     .addOnSuccessListener {
                         val userRecord = User(uid = uid, email = profile.email, role = "buyer")
@@ -82,13 +81,13 @@ class AuthRepository {
         profile: SellerProfile,
         password: String,
         onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         auth.createUserWithEmailAndPassword(profile.email, password)
             .addOnSuccessListener { authResult ->
                 val uid = authResult.user?.uid ?: ""
                 val finalProfile = profile.copy(uid = uid)
-                
+
                 db.collection("seller_profiles").document(uid).set(finalProfile)
                     .addOnSuccessListener {
                         val userRecord = User(uid = uid, email = profile.email, role = "seller")
@@ -107,36 +106,53 @@ class AuthRepository {
         context: Context,
         imageUri: Uri,
         onSuccess: (String) -> Unit, // returns the URL string
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         try {
             MediaManager.get()
         } catch (e: Exception) {
-            val config = hashMapOf(
-                "cloud_name" to BuildConfig.CLOUDINARY_CLOUD_NAME,
-                "secure" to true
-            )
+            val config =
+                hashMapOf(
+                    "cloud_name" to BuildConfig.CLOUDINARY_CLOUD_NAME,
+                    "secure" to true,
+                )
             MediaManager.init(context, config)
         }
 
         MediaManager.get().upload(imageUri)
             .option("unsigned", true)
             .option("upload_preset", "craftlanka_preset")
-            .callback(object : UploadCallback {
-                override fun onStart(requestId: String?) {}
-                override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {}
-                
-                override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
-                    val url = resultData?.get("secure_url") as? String ?: ""
-                    onSuccess(url)
-                }
+            .callback(
+                object : UploadCallback {
+                    override fun onStart(requestId: String?) {}
 
-                override fun onError(requestId: String?, error: ErrorInfo?) {
-                    onFailure(error?.description ?: "Cloudinary upload failed")
-                }
+                    override fun onProgress(
+                        requestId: String?,
+                        bytes: Long,
+                        totalBytes: Long,
+                    ) {}
 
-                override fun onReschedule(requestId: String?, error: ErrorInfo?) {}
-            })
+                    override fun onSuccess(
+                        requestId: String?,
+                        resultData: MutableMap<Any?, Any?>?,
+                    ) {
+                        val url = resultData?.get("secure_url") as? String ?: ""
+                        onSuccess(url)
+                    }
+
+                    override fun onError(
+                        requestId: String?,
+                        error: ErrorInfo?,
+                    ) {
+                        onFailure(error?.description ?: "Cloudinary upload failed")
+                    }
+
+                    override fun onReschedule(
+                        requestId: String?,
+                        error: ErrorInfo?,
+                    ) {}
+                },
+            )
             .dispatch()
     }
 
@@ -146,7 +162,7 @@ class AuthRepository {
         email: String,
         password: String,
         onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener { authResult ->
@@ -164,7 +180,10 @@ class AuthRepository {
             .addOnFailureListener { e -> onFailure(e.message ?: "Login failed") }
     }
 
-    fun getBuyerProfile(uid: String, onSuccess: (BuyerProfile?) -> Unit) {
+    fun getBuyerProfile(
+        uid: String,
+        onSuccess: (BuyerProfile?) -> Unit,
+    ) {
         db.collection("buyer_profiles").document(uid).get()
             .addOnSuccessListener { document ->
                 onSuccess(document.toObject(BuyerProfile::class.java))
@@ -172,7 +191,10 @@ class AuthRepository {
             .addOnFailureListener { onSuccess(null) }
     }
 
-    fun getSellerProfile(uid: String, onSuccess: (SellerProfile?) -> Unit) {
+    fun getSellerProfile(
+        uid: String,
+        onSuccess: (SellerProfile?) -> Unit,
+    ) {
         db.collection("seller_profiles").document(uid).get()
             .addOnSuccessListener { document ->
                 onSuccess(document.toObject(SellerProfile::class.java))

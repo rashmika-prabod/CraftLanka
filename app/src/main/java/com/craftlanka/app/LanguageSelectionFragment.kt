@@ -15,22 +15,24 @@ import com.craftlanka.app.databinding.FragmentLanguageSelectionBinding
 import com.google.android.material.card.MaterialCardView
 
 class LanguageSelectionFragment : Fragment() {
-
-    private var _binding: FragmentLanguageSelectionBinding? = null
-    private val binding get() = _binding!!
+    private var bindingVar: FragmentLanguageSelectionBinding? = null
+    private val binding get() = bindingVar!!
 
     private var selectedLanguageCode = "en"
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentLanguageSelectionBinding.inflate(inflater, container, false)
+        bindingVar = FragmentLanguageSelectionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         // Read current language from preferences to highlight the correct card
@@ -60,7 +62,11 @@ class LanguageSelectionFragment : Fragment() {
         updateCardStyle(binding.cardTamil, binding.ivIconTamil, langCode == "ta")
     }
 
-    private fun updateCardStyle(card: MaterialCardView, icon: ImageView, isSelected: Boolean) {
+    private fun updateCardStyle(
+        card: MaterialCardView,
+        icon: ImageView,
+        isSelected: Boolean,
+    ) {
         if (isSelected) {
             val selectedColor = "#0E3818".toColorInt()
             card.strokeColor = selectedColor
@@ -76,7 +82,7 @@ class LanguageSelectionFragment : Fragment() {
     }
 
     private fun saveLanguageAndProceed(langCode: String) {
-        //1. Save to preferences
+        // 1. Save to preferences
         val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         prefs.edit {
             putString("selected_language", langCode)
@@ -93,6 +99,6 @@ class LanguageSelectionFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        bindingVar = null
     }
 }
