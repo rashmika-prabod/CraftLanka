@@ -21,8 +21,10 @@ class AuthRepository {
 
     fun signInWithGoogle(
         idToken: String,
-        targetRole: String, // "buyer" or "seller"
-        onSuccess: (String) -> Unit, // returns user role
+        // "buyer" or "seller"
+        targetRole: String,
+        // returns user role
+        onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit,
     ) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
@@ -105,7 +107,8 @@ class AuthRepository {
     fun uploadSellerPhoto(
         context: Context,
         imageUri: Uri,
-        onSuccess: (String) -> Unit, // returns the URL string
+        // returns the URL string
+        onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit,
     ) {
         try {
