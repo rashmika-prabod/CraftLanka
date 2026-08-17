@@ -120,14 +120,14 @@ class BuyerRegisterFragment : Fragment() {
                         showPolicyDialog(
                             title = "Terms & Conditions",
                             message =
-                                """
+                            """
                                 Welcome to CraftLanka! By registering as a buyer, you agree to:
                                 
                                 1. Maintain valid account credentials.
                                 2. Engage respectfully with local Sri Lankan artisans.
                                 3. Honor completed transaction agreements and orders.
                                 4. Use the platform in accordance with local laws and regulations.
-                                """.trimIndent(),
+                            """.trimIndent(),
                         )
                     }
 
@@ -150,13 +150,13 @@ class BuyerRegisterFragment : Fragment() {
                         showPolicyDialog(
                             title = "Privacy Policy",
                             message =
-                                """
+                            """
                                 CraftLanka respects your privacy:
                                 
                                 1. We collect minimal information (Name, Email, Phone) necessary to fulfill orders.
                                 2. Your data is encrypted and secure.
                                 3. We never share your personal information with third parties without your explicit consent.
-                                """.trimIndent(),
+                            """.trimIndent(),
                         )
                     }
 
