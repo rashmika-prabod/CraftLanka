@@ -176,8 +176,11 @@ class AuthRepository {
                             val role = document.getString("role") ?: "buyer"
                             onSuccess(role)
                         } else {
-                            onFailure("User profile not found")
+                            onFailure("User profile record not found in database.")
                         }
+                    }
+                    .addOnFailureListener { e ->
+                        onFailure(e.message ?: "Failed to fetch user role from database")
                     }
             }
             .addOnFailureListener { e -> onFailure(e.message ?: "Login failed") }

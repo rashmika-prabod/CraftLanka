@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="24dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="32dp">
+
+        <!-- Warning Icon -->
+        <ImageView
+            android:id="@+id/iv_warning_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_warning_modal" />
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Are you sure?"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Description -->
+        <TextView
+            android:id="@+id/tv_delete_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:text="This will permanently remove item from your inventory. This action cannot be undone."
+            android:textColor="@color/text_grey"
+            android:textSize="14sp" />
+
+        <!-- No, Go Back Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cancel_delete"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="@color/brand_green_dark"
+            android:text="NO, GO BACK"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:cornerRadius="28dp" />
+
+        <!-- Yes, Delete Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_confirm_delete"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:text="YES, DELETE"
+            android:textColor="#991B1B"
+            android:textStyle="bold"
+            app:cornerRadius="28dp"
+            app:icon="@drawable/ic_trash_delete"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconTint="#991B1B"
+            app:strokeColor="#991B1B"
+            app:strokeWidth="1.5dp" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

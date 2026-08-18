@@ -1,6 +1,7 @@
 package com.craftlanka.app.seller
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,10 @@ import com.bumptech.glide.Glide
 import com.craftlanka.app.MainActivity
 import com.craftlanka.app.R
 import com.craftlanka.app.data.AuthRepository
+import com.craftlanka.app.data.SellerRepository
 import com.craftlanka.app.databinding.FragmentSellerHomeBinding
 import com.craftlanka.app.databinding.ItemLowStockBinding
+import com.craftlanka.app.model.Product
 import com.google.firebase.auth.FirebaseAuth
 
 class SellerHomeFragment : Fragment() {
@@ -22,7 +25,11 @@ class SellerHomeFragment : Fragment() {
     private val binding get() = bindingVar!!
 
     private val authRepository = AuthRepository()
-    private val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    private val sellerRepository = SellerRepository()
+
+    // Dynamic UID fetch to ensure we always have the current authenticated user
+    private val currentUid: String
+        get() = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,21 +49,14 @@ class SellerHomeFragment : Fragment() {
         loadSellerProfile()
         setupListeners()
         setupCustomBottomNavigation()
-
-        updateDashboardStats(
-            products = 42,
-            sales = 128,
-            revenue = "450,200",
-            lowStockCount = 8,
-        )
-
-        setupLowStockList()
+        fetchDashboardData()
     }
 
     private fun loadSellerProfile() {
-        if (currentUid.isEmpty()) return
+        val uid = currentUid
+        if (uid.isEmpty()) return
 
-        authRepository.getSellerProfile(currentUid) { profile ->
+        authRepository.getSellerProfile(uid) { profile ->
             if (isAdded && profile != null) {
                 if (profile.photoUrl.isNotEmpty()) {
                     binding.ivProfilePhoto.visibility = View.VISIBLE
@@ -75,26 +75,81 @@ class SellerHomeFragment : Fragment() {
         }
     }
 
-    private fun setupListeners() {
-        binding.btnProfile.setOnClickListener {
-            Toast.makeText(requireContext(), "Opening Profile...", Toast.LENGTH_SHORT).show()
+    private fun fetchDashboardData() {
+        val uid = currentUid
+        if (uid.isEmpty()) return
+
+        sellerRepository.getSellerProducts(
+            sellerUid = uid,
+            onSuccess = { products ->
+                if (isAdded) {
+                    calculateAndDisplayStats(products)
+                }
+            },
+            onFailure = { error ->
+                if (isAdded) {
+                    Toast.makeText(requireContext(), "Error loading stats: $error", Toast.LENGTH_SHORT).show()
+                }
+            },
+        )
+    }
+
+    private fun calculateAndDisplayStats(products: List<Product>) {
+        val totalProducts = products.size
+        val lowStockProducts = products.filter { it.stockQuantity <= 5 }
+        val lowStockCount = lowStockProducts.size
+
+        // Placeholder for sales/revenue until Orders module is implemented
+        updateDashboardStats(
+            products = totalProducts,
+            sales = 0,
+            revenue = "0",
+            lowStockCount = lowStockCount,
+        )
+
+        displayLowStockList(lowStockProducts)
+    }
+
+    private fun displayLowStockList(lowStockItems: List<Product>) {
+        binding.layoutLowStockItems.removeAllViews()
+
+        if (lowStockItems.isEmpty()) {
+            val emptyText = TextView(requireContext()).apply {
+                text = "All items well stocked"
+                setTextColor(ContextCompat.getColor(context, R.color.text_grey))
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+                setPadding(0, 20, 0, 0)
+            }
+            binding.layoutLowStockItems.addView(emptyText)
+            return
         }
 
-        // NAVIGATION: Home -> Add Product
+        for (product in lowStockItems) {
+            val itemBinding =
+                ItemLowStockBinding.inflate(layoutInflater, binding.layoutLowStockItems, false)
+            itemBinding.tvItemName.text = product.productName
+            itemBinding.tvStockBadge.text = getString(R.string.format_low_stock, product.stockQuantity.toString())
+            binding.layoutLowStockItems.addView(itemBinding.root)
+        }
+    }
+
+    private fun setupListeners() {
+        binding.btnProfile.setOnClickListener {
+            Toast.makeText(requireContext(), "Profile feature coming soon", Toast.LENGTH_SHORT).show()
+        }
+
         binding.fabAddProduct.setOnClickListener {
-            val mainActivity = requireActivity() as MainActivity
-            mainActivity.navigationManager.replaceFragment(
-                fragment = AddProductFragment(),
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = AddProductFragment.newInstance(),
                 addToBackStack = true,
             )
         }
 
         binding.btnViewInventory.setOnClickListener {
-            Toast.makeText(requireContext(), "Opening Inventory...", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.btnManagePlan.setOnClickListener {
-            Toast.makeText(requireContext(), "Opening Plan Management...", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = SellerProductsFragment(),
+                addToBackStack = true,
+            )
         }
     }
 
@@ -103,29 +158,20 @@ class SellerHomeFragment : Fragment() {
         resetAllNavItems()
         updateNavItemVisuals(nav.ivNavHome, nav.tvNavHome, true)
 
-        nav.navHome.setOnClickListener {
-            resetAllNavItems()
-            updateNavItemVisuals(nav.ivNavHome, nav.tvNavHome, true)
-        }
-        nav.navRequests.setOnClickListener {
-            resetAllNavItems()
-            updateNavItemVisuals(nav.ivNavRequests, nav.tvNavRequests, true)
-        }
+        nav.navHome.setOnClickListener { /* Already here */ }
+
         nav.navProducts.setOnClickListener {
-            resetAllNavItems()
-            updateNavItemVisuals(nav.ivNavProducts, nav.tvNavProducts, true)
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = SellerProductsFragment(),
+                addToBackStack = false,
+            )
         }
-        nav.navAnalytics.setOnClickListener {
-            resetAllNavItems()
-            updateNavItemVisuals(nav.ivNavAnalytics, nav.tvNavAnalytics, true)
-        }
+
         nav.navInventory.setOnClickListener {
-            resetAllNavItems()
-            updateNavItemVisuals(nav.ivNavInventory, nav.tvNavInventory, true)
-        }
-        nav.navProfile.setOnClickListener {
-            resetAllNavItems()
-            updateNavItemVisuals(nav.ivNavProfile, nav.tvNavProfile, true)
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = SellerProductsFragment(),
+                addToBackStack = false,
+            )
         }
     }
 
@@ -142,10 +188,10 @@ class SellerHomeFragment : Fragment() {
     private fun updateNavItemVisuals(icon: ImageView, label: TextView, isSelected: Boolean) {
         val context = requireContext()
         if (isSelected) {
-            icon.setImageState(intArrayOf(android.R.attr.state_checked), true)
+            icon.setColorFilter(ContextCompat.getColor(context, R.color.nav_active_content))
             label.setTextColor(ContextCompat.getColor(context, R.color.nav_active_content))
         } else {
-            icon.setImageState(intArrayOf(), true)
+            icon.setColorFilter(ContextCompat.getColor(context, R.color.nav_inactive_content))
             label.setTextColor(ContextCompat.getColor(context, R.color.nav_inactive_content))
         }
     }
@@ -160,24 +206,6 @@ class SellerHomeFragment : Fragment() {
         binding.tvTotalSales.text = sales.toString()
         binding.tvTotalRevenue.text = getString(R.string.format_revenue, revenue)
         binding.tvLowStockCount.text = lowStockCount.toString()
-    }
-
-    private fun setupLowStockList() {
-        val lowStockItems =
-            listOf(
-                Pair("Traditional Clay Water Jug", "2"),
-                Pair("Hand-woven Cotton Throw", "5"),
-            )
-
-        binding.layoutLowStockItems.removeAllViews()
-
-        for (item in lowStockItems) {
-            val itemBinding =
-                ItemLowStockBinding.inflate(layoutInflater, binding.layoutLowStockItems, false)
-            itemBinding.tvItemName.text = item.first
-            itemBinding.tvStockBadge.text = getString(R.string.format_low_stock, item.second)
-            binding.layoutLowStockItems.addView(itemBinding.root)
-        }
     }
 
     override fun onDestroyView() {
