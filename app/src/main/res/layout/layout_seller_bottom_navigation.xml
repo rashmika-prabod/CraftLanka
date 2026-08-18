@@ -1,14 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.bottomnavigation.BottomNavigationView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/seller_bottom_nav"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="72dp"
     android:background="@color/white"
-    app:elevation="8dp"
-    app:menu="@menu/seller_bottom_nav_menu"
-    app:labelVisibilityMode="labeled"
-    app:itemIconTint="@null"
-    app:itemTextColor="@color/nav_icon_outline_selector"
-    app:itemRippleColor="@color/nav_active_bg" />
+    android:elevation="8dp"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
+
+    <!-- Home -->
+    <LinearLayout
+        android:id="@+id/nav_home"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless">
+        <ImageView
+            android:id="@+id/iv_nav_home"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_nav_home" />
+        <TextView
+            android:id="@+id/tv_nav_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home"
+            android:textSize="11sp"
+            android:textColor="@color/nav_inactive_content" />
+    </LinearLayout>
+
+    <!-- Requests -->
+    <LinearLayout
+        android:id="@+id/nav_requests"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless">
+        <ImageView
+            android:id="@+id/iv_nav_requests"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_nav_requests" />
+        <TextView
+            android:id="@+id/tv_nav_requests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Requests"
+            android:textSize="11sp"
+            android:textColor="@color/nav_inactive_content" />
+    </LinearLayout>
+
+    <!-- Products -->
+    <LinearLayout
+        android:id="@+id/nav_products"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless">
+        <ImageView
+            android:id="@+id/iv_nav_products"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_nav_products" />
+        <TextView
+            android:id="@+id/tv_nav_products"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Products"
+            android:textSize="11sp"
+            android:textColor="@color/nav_inactive_content" />
+    </LinearLayout>
+
+    <!-- Analytics -->
+    <LinearLayout
+        android:id="@+id/nav_analytics"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless">
+        <ImageView
+            android:id="@+id/iv_nav_analytics"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_nav_analytics" />
+        <TextView
+            android:id="@+id/tv_nav_analytics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Analytics"
+            android:textSize="11sp"
+            android:textColor="@color/nav_inactive_content" />
+    </LinearLayout>
+
+    <!-- Inventory -->
+    <LinearLayout
+        android:id="@+id/nav_inventory"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless">
+        <ImageView
+            android:id="@+id/iv_nav_inventory"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_nav_inventory" />
+        <TextView
+            android:id="@+id/tv_nav_inventory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inventory"
+            android:textSize="11sp"
+            android:textColor="@color/nav_inactive_content" />
+    </LinearLayout>
+
+    <!-- Profile -->
+    <LinearLayout
+        android:id="@+id/nav_profile"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless">
+        <ImageView
+            android:id="@+id/iv_nav_profile"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_nav_profile" />
+        <TextView
+            android:id="@+id/tv_nav_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile"
+            android:textSize="11sp"
+            android:textColor="@color/nav_inactive_content" />
+    </LinearLayout>
+
+</LinearLayout>
