@@ -2,6 +2,7 @@ package com.craftlanka.app.seller
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,8 +49,7 @@ class SellerLoginFragment : Fragment() {
 
         // Redirect to Seller Registration Screen
         binding.btnGotoRegister.setOnClickListener {
-            val mainActivity = requireActivity() as MainActivity
-            mainActivity.navigationManager.replaceFragment(
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
                 fragment = SellerRegisterFragment(),
                 addToBackStack = true,
             )
@@ -62,18 +62,23 @@ class SellerLoginFragment : Fragment() {
         val rememberMe = binding.cbRememberMe.isChecked
 
         binding.btnLogin.isEnabled = false
+        Toast.makeText(requireContext(), "Logging you in...", Toast.LENGTH_SHORT).show()
 
         // 1. Authenticate with Firebase
         authRepository.loginUser(
             email = email,
             password = password,
             onSuccess = { role ->
-                // 2. Check if the user is actually a seller
+                if (!isAdded) return@loginUser
+
+                // 2. Verify Seller Role
                 if (role == "seller") {
                     val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-
-                    // 3. Fetch the Seller Profile to get business name
+                    
+                    // 3. Fetch Profile for personalization
                     authRepository.getSellerProfile(uid) { profile ->
+                        if (!isAdded) return@getSellerProfile
+
                         val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
                         prefs.edit {
                             putString("logged_seller", email)
@@ -82,14 +87,11 @@ class SellerLoginFragment : Fragment() {
                             putString("seller_business_name", profile?.businessName ?: "")
                         }
 
-                        val displayName = profile?.businessName ?: "Seller"
-                        Toast.makeText(requireContext(), "Welcome back, $displayName!", Toast.LENGTH_SHORT).show()
-
+                        Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_SHORT).show()
                         binding.btnLogin.isEnabled = true
 
-                        // FIX: Navigate to Seller Dashboard Home
-                        val mainActivity = requireActivity() as MainActivity
-                        mainActivity.navigationManager.replaceFragment(
+                        // REDIRECTION FIX: Ensure navigation happens correctly
+                        (activity as? MainActivity)?.navigationManager?.replaceFragment(
                             fragment = SellerHomeFragment(),
                             addToBackStack = false,
                             clearBackStack = true,
@@ -102,8 +104,10 @@ class SellerLoginFragment : Fragment() {
                 }
             },
             onFailure = { errorMessage ->
-                binding.btnLogin.isEnabled = true
-                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+                if (isAdded) {
+                    binding.btnLogin.isEnabled = true
+                    Toast.makeText(requireContext(), "Login failed: $errorMessage", Toast.LENGTH_LONG).show()
+                }
             },
         )
     }
@@ -113,13 +117,13 @@ class SellerLoginFragment : Fragment() {
         val password = binding.etPassword.text.toString().trim()
 
         if (identifier.isEmpty()) {
-            binding.tilIdentifier.error = "Please enter your email"
+            binding.tilIdentifier.error = "Email is required"
             return false
         }
         binding.tilIdentifier.error = null
 
         if (password.isEmpty()) {
-            binding.tilPassword.error = "Please enter your password"
+            binding.tilPassword.error = "Password is required"
             return false
         }
         binding.tilPassword.error = null

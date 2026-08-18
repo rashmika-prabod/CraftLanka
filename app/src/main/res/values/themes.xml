@@ -20,6 +20,12 @@
         <item name="enableEdgeToEdge">true</item>
     </style>
 
+    <!-- Custom Dialog Theme for rounded corners -->
+    <style name="Theme.CraftLanka.Dialog.Transparent" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
     <!-- UI Styles Required by Layouts -->
     <style name="RoundedCorners">
         <item name="cornerSize">12dp</item>

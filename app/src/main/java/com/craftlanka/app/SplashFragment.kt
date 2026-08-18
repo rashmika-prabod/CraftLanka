@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.craftlanka.app.admin.AdminLoginFragment
 import com.craftlanka.app.buyer.BuyerLoginFragment
 import com.craftlanka.app.databinding.FragmentSplashBinding
+import com.craftlanka.app.seller.SellerHomeFragment
 import com.craftlanka.app.seller.SellerLoginFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -58,9 +59,29 @@ class SplashFragment : Fragment() {
 
         val targetFragment: Fragment =
             when (userRole) {
-                "admin" -> AdminLoginFragment()
-                "seller" -> SellerLoginFragment()
-                "buyer" -> BuyerLoginFragment()
+                "admin" -> {
+                    val isAdminLoggedIn = prefs.getBoolean("admin_is_logged_in", false)
+                    if (isAdminLoggedIn) AdminLoginFragment() else AdminLoginFragment()
+                }
+                "seller" -> {
+                    val isSellerRemembered = prefs.getBoolean("seller_remember_me", false)
+                    val loggedSeller = prefs.getString("logged_seller", null)
+                    if (isSellerRemembered && !loggedSeller.isNullOrEmpty()) {
+                        SellerHomeFragment()
+                    } else {
+                        SellerLoginFragment()
+                    }
+                }
+                "buyer" -> {
+                    val isBuyerRemembered = prefs.getBoolean("remember_me", false)
+                    val loggedBuyer = prefs.getString("logged_user", null)
+                    if (isBuyerRemembered && !loggedBuyer.isNullOrEmpty()) {
+                        // TODO: Change to BuyerHome/Dashboard when ready
+                        BuyerLoginFragment()
+                    } else {
+                        BuyerLoginFragment()
+                    }
+                }
                 else -> {
                     if (selectedLanguage != null) {
                         RoleSelectionFragment()
