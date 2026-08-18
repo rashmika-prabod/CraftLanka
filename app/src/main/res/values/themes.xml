@@ -1,30 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.CraftLanka" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.CraftLanka" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/charcoal</item>
+        <item name="colorPrimary">@color/brand_green</item>
+        <item name="colorPrimaryVariant">@color/brand_green_dark</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/mint_green</item>
-        <item name="colorOnSecondary">@color/charcoal</item>
+        <item name="colorSecondary">@color/nav_active_bg</item>
+        <item name="colorSecondaryVariant">@color/nav_active_content</item>
+        <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/header_forest_green</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="bottomNavigationStyle">@style/Widget.Material3.BottomNavigationView</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- Bottom Navigation Customization -->
+        <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
     </style>
-    <style name="ActiveIndicatorPill" parent="">
-        <item name="android:color">@color/mint_green</item>
-        <item name="marginHorizontal">12dp</item>
+
+    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="enableEdgeToEdge">true</item>
     </style>
-    <style name="RoundedSquare" parent="">
-        <item name="cornerFamily">rounded</item>
+
+    <!-- Missing Styles Required by Restored Layouts -->
+    <style name="RoundedCorners">
         <item name="cornerSize">12dp</item>
     </style>
-    <style name="RoundedCorners" parent="">
-        <item name="cornerFamily">rounded</item>
+
+    <style name="RoundedSquare">
         <item name="cornerSize">8dp</item>
     </style>
+
+    <style name="ActiveIndicatorPill" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/nav_active_bg</item>
+        <item name="android:width">44dp</item>
+        <item name="android:height">32dp</item>
+    </style>
+
     <style name="ShapeAppearance.App.Corner24dp" parent="ShapeAppearance.Material3.Corner.Medium">
         <item name="cornerSize">24dp</item>
     </style>

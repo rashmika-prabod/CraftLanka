@@ -3,13 +3,13 @@
     <!-- Base application theme. -->
     <style name="Theme.CraftLanka" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/charcoal</item>
+        <item name="colorPrimary">@color/brand_green</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/mint_green</item>
-        <item name="colorOnSecondary">@color/charcoal</item>
+        <item name="colorSecondary">@color/nav_active_bg</item>
+        <item name="colorOnSecondary">@color/brand_dark</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/header_forest_green</item>
+        <item name="android:statusBarColor">@color/brand_green_dark</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="bottomNavigationStyle">@style/Widget.Material3.BottomNavigationView</item>
     </style>

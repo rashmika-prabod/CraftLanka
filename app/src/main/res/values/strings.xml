@@ -129,15 +129,9 @@
     <string name="already_have_seller_account">Already have a seller account?</string>
     <string name="btn_login_to_your_shop">Login to Your Shop</string>
     <string name="cd_back">Back</string>
-    <string name="back1">Back</string>
     <string name="choose_profile_photo">Choose Profile Photo</string>
-    <string name="gallery_icon">Gallery Icon</string>
     <string name="choose_from_gallery">Choose from Gallery</string>
     <string name="cancel">Cancel</string>
-    <string name="choose_photo">Choose Profile Photo</string>
-    <string name="galleryIcon">Gallery Icon</string>
-    <string name="chooseFromGallery">Choose from Gallery</string>
-    <string name="btn_cancel">Cancel</string>
 
     <!-- Buyer Login Strings -->
     <string name="welcome_back">Welcome Back</string>
@@ -166,5 +160,29 @@
     <string name="hint_admin_email">name@craftlanka.com</string>
     <string name="encrypted_console_text">End-to-End Encrypted Console</string>
     <string name="copyright_text">© 2024 CraftLanka. All Rights Reserved.</string>
-    <string name="btn_skip">btn_skip</string>
+
+    <!-- Seller Home Strings -->
+    <string name="label_total_products">Total Products</string>
+    <string name="label_total_sales">Total Sales</string>
+    <string name="label_revenue">Revenue</string>
+    <string name="label_low_stock">Low Stock</string>
+    <string name="title_low_stock_alert">Low Stock Alert</string>
+    <string name="btn_view_inventory">View Inventory</string>
+    <string name="title_performance_snapshot">Performance Snapshot</string>
+    <string name="label_best_selling">Best Selling</string>
+    <string name="label_current_plan">Current Plan</string>
+    <string name="label_pro_plan">Pro Plan</string>
+    <string name="label_unlimited_products">Unlimited Products</string>
+    <string name="btn_manage">Manage</string>
+    <string name="format_revenue">Rs. %s</string>
+    <string name="format_low_stock">%s Left</string>
+    <string name="placeholder_best_seller_name">Ebony Elephant Figurine</string>
+
+    <!-- Bottom Navigation Strings -->
+    <string name="nav_home">Home</string>
+    <string name="nav_requests">Requests</string>
+    <string name="nav_products">Products</string>
+    <string name="nav_analytics">Analytics</string>
+    <string name="nav_inventory">Inventory</string>
+    <string name="nav_profile">Profile</string>
 </resources>
