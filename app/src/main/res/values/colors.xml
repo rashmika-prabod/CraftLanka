@@ -7,7 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
     <!-- Design Spec Colors -->
     <color name="app_background">#FAF9E8</color>
     <color name="background_cream">#FAF9E8</color>
@@ -25,7 +24,6 @@
     <color name="shipped_blue_bg">#E1F5FE</color>
     <color name="shipped_blue_text">#0288D1</color>
     <color name="delete_yellow_bg">#FFFDE7</color>
-
     <!-- Project Compatibility & Status Colors -->
     <color name="primary_blue">#3B82F6</color>
     <color name="danger_red">#B71C1C</color>
@@ -33,13 +31,11 @@
     <color name="cart_background">#FDFCE7</color>
     <color name="checkout_background">#FDFCE7</color>
     <color name="light_green_fill">#EAF8EC</color>
-
     <color name="light_gray_pill">#E0E0E0</color>
     <color name="promo_blue_bg">#E2EDFF</color>
     <color name="promo_blue_icon">#3B82F6</color>
     <color name="price_drop_bg">#FFE2E2</color>
     <color name="price_drop_icon">#C2185B</color>
-
     <color name="status_pending_bg">#FFECCC</color>
     <color name="status_pending_text">#C47D00</color>
     <color name="status_processing_bg">#E2EDFF</color>
@@ -50,36 +46,22 @@
     <color name="status_delivered_text">#0F5229</color>
     <color name="status_cancelled_bg">#FFE2E2</color>
     <color name="status_cancelled_text">#C23B3B</color>
-
-    <!-- Legacy Colors -->
     <color name="card_background">#FFFFFF</color>
-    <color name="warning_bg">#FFFBEB</color>
-    <color name="danger_red">#EF4444</color>
-
-    <!-- Order Status Backgrounds -->
-    <color name="status_pending_bg">#FEF3C7</color>
-    <color name="status_processing_bg">#E0F2FE</color>
-    <color name="status_shipped_bg">#DBEAFE</color>
-    <color name="status_delivered_bg">#D1FAE5</color>
-    <color name="status_cancelled_bg">#FEE2E2</color>
-
-    <!-- Order Status Text Colors -->
-    <color name="status_pending_text">#92400E</color>
-    <color name="status_processing_text">#0369A1</color>
-    <color name="status_shipped_text">#1D4ED8</color>
-    <color name="status_delivered_text">#065F46</color>
-    <color name="status_cancelled_text">#991B1B</color>
-
-    <!-- UI Elements Text & Accents -->
-    <color name="primary_blue">#2563EB</color>
-    <color name="light_blue_text">#3B82F6</color>
-    <color name="shipped_blue_text">#1D4ED8</color>
-    <color name="gold_accent">#E5D7A1</color>
-    <color name="dark_red_text">#991B1B</color>
-
-    <!-- Notification / Promo Colors -->
-    <color name="promo_blue_bg">#EFF6FF</color>
-    <color name="promo_blue_icon">#3B82F6</color>
-    <color name="price_drop_bg">#F0FDF4</color>
-    <color name="price_drop_icon">#22C55E</color>
+    <!-- Brand Colors -->
+    <color name="brand_green">#154212</color>
+    <color name="brand_green_dark">#0E3818</color>
+    <color name="brand_dark">#1B1D0E</color>
+    <color name="brand_brown">#8C3B00</color>
+    <color name="brand_orange">#FFA26A</color>
+    <!-- Navigation Colors -->
+    <color name="nav_active_bg">#FFA26A</color>
+    <color name="nav_active_content">#783603</color>
+    <color name="nav_inactive_content">#555555</color>
+    <!-- UI States -->
+    <color name="card_bg_red">#FEE2E2</color>
+    <color name="icon_bg_green">#ECF3E6</color>
+    <color name="icon_bg_red">#FEE2E2</color>
+    <color name="text_red">#DC2626</color>
+    <color name="text_grey">#42493E</color>
+    <color name="light_gray">#F5F5F5</color>
 </resources>
