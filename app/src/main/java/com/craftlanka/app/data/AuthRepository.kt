@@ -2,6 +2,7 @@ package com.craftlanka.app.data
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
@@ -167,23 +168,33 @@ class AuthRepository {
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit,
     ) {
+        Log.d("AuthRepo", "Login request for: $email")
+        
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener { authResult ->
                 val uid = authResult.user?.uid ?: ""
+                Log.d("AuthRepo", "Firebase Auth Success. UID: $uid")
+                
                 db.collection("users").document(uid).get()
                     .addOnSuccessListener { document ->
                         if (document.exists()) {
                             val role = document.getString("role") ?: "buyer"
+                            Log.d("AuthRepo", "Firestore Success. Role: $role")
                             onSuccess(role)
                         } else {
+                            Log.e("AuthRepo", "Firestore Error: User document not found for UID: $uid")
                             onFailure("User profile record not found in database.")
                         }
                     }
                     .addOnFailureListener { e ->
+                        Log.e("AuthRepo", "Firestore Error: ${e.message}")
                         onFailure(e.message ?: "Failed to fetch user role from database")
                     }
             }
-            .addOnFailureListener { e -> onFailure(e.message ?: "Login failed") }
+            .addOnFailureListener { e -> 
+                Log.e("AuthRepo", "Firebase Auth Failure: ${e.message}")
+                onFailure(e.message ?: "Login failed") 
+            }
     }
 
     fun getBuyerProfile(

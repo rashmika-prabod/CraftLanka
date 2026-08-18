@@ -6,12 +6,16 @@ import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
 import com.craftlanka.app.BuildConfig
+import com.craftlanka.app.model.BuyerRequest
 import com.craftlanka.app.model.Product
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FieldValue
 
 class SellerRepository {
     private val db = FirebaseFirestore.getInstance()
     private val productsRef = db.collection("products")
+    private val requestsRef = db.collection("buyer_requests")
+    private val sellerProfilesRef = db.collection("seller_profiles")
 
     /**
      * Uploads a product image to Cloudinary.
@@ -134,5 +138,82 @@ class SellerRepository {
         productsRef.document(productId).delete()
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { e -> onFailure(e.message ?: "Failed to delete product") }
+    }
+
+    /**
+     * Fetches requests for a specific seller.
+     */
+    fun getSellerRequests(
+        sellerUid: String,
+        onSuccess: (List<BuyerRequest>) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        requestsRef.whereEqualTo("sellerUid", sellerUid)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val requestList = snapshot.toObjects(BuyerRequest::class.java)
+                onSuccess(requestList)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e.message ?: "Failed to fetch requests")
+            }
+    }
+
+    /**
+     * Atomically accepts a request and decrements stock using a transaction.
+     */
+    fun acceptRequest(
+        request: BuyerRequest,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        val requestDoc = requestsRef.document(request.requestId)
+        val productDoc = productsRef.document(request.productId)
+
+        db.runTransaction { transaction ->
+            val productSnapshot = transaction.get(productDoc)
+            val currentStock = productSnapshot.getLong("stockQuantity") ?: 0L
+            
+            if (currentStock >= request.quantity) {
+                transaction.update(requestDoc, "status", "ACCEPTED")
+                transaction.update(productDoc, "stockQuantity", currentStock - request.quantity)
+                null
+            } else {
+                throw Exception("Insufficient stock")
+            }
+        }.addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { e -> onFailure(e.message ?: "Failed to accept request") }
+    }
+
+    /**
+     * Updates the status of a buyer request to REJECTED.
+     */
+    fun rejectRequest(
+        requestId: String,
+        rejectionReason: String,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        val updates = hashMapOf<String, Any>(
+            "status" to "REJECTED",
+            "rejectionReason" to rejectionReason
+        )
+        requestsRef.document(requestId).update(updates)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e.message ?: "Failed to reject request") }
+    }
+
+    /**
+     * Updates the auto-accept preference for a seller.
+     */
+    fun updateAutoAcceptPreference(
+        sellerUid: String,
+        autoAccept: Boolean,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        sellerProfilesRef.document(sellerUid).update("autoAcceptRequests", autoAccept)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e.message ?: "Failed to update preference") }
     }
 }

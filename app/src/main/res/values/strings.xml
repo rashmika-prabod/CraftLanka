@@ -149,7 +149,7 @@
     <!-- Seller Login Strings -->
     <string name="seller_login_title">Seller Login</string>
     <string name="seller_login_subtitle">Manage your handmade craft business</string>
-    <string name="hint_seller_identifier">e.g. 0712345678</string>
+    <string name="hint_seller_identifier">e.g. name@example.com</string>
     <string name="new_seller_prompt">New Seller?</string>
     <string name="secured_by_craft_council">Secured by Sri Lankan Craft Council</string>
 
@@ -185,4 +185,21 @@
     <string name="nav_analytics">Analytics</string>
     <string name="nav_inventory">Inventory</string>
     <string name="nav_profile">Profile</string>
+
+    <!-- Buyer Requests Strings -->
+    <string name="format_quantity">Quantity: %1$02d</string>
+    <string name="format_lkr_price">LKR %1$,.2f</string>
+    <string name="format_rejection_reason">Reason: %1$s</string>
+    <string name="title_active_requests">Active Requests</string>
+    <string name="title_confirmed_orders">Confirmed Orders</string>
+    <string name="title_rejected_requests">Rejected Requests</string>
+    <string name="subtitle_confirmed_orders">Review your upcoming handicraft deliveries.</string>
+    <string name="format_accepted_requests_weekly">You have %1$d accepted requests for this week. Keep up the great work!</string>
+    <string name="empty_requests_message">No requests found</string>
+    <string name="label_auto_accept">Automatically Accept Requests</string>
+    <string name="desc_auto_accept">New customer requests will be accepted automatically</string>
+    <string name="label_today">Today, %1$s</string>
+    <string name="label_yesterday">Yesterday, %1$s</string>
+    <string name="btn_accept">ACCEPT</string>
+    <string name="btn_reject">REJECT</string>
 </resources>

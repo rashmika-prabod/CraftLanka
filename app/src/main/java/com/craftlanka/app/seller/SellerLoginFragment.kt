@@ -2,6 +2,7 @@ package com.craftlanka.app.seller
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,11 +58,13 @@ class SellerLoginFragment : Fragment() {
 
     private fun performSellerLogin() {
         val email = binding.etIdentifier.text.toString().trim()
-        val password = binding.etPassword.text.toString().trim()
+        val password = binding.etPassword.text.toString()
         val rememberMe = binding.cbRememberMe.isChecked
 
         binding.btnLogin.isEnabled = false
         Toast.makeText(requireContext(), "Logging you in...", Toast.LENGTH_SHORT).show()
+
+        Log.d("SellerLogin", "Attempting login for email: $email")
 
         // 1. Authenticate with Firebase
         authRepository.loginUser(
@@ -73,6 +76,7 @@ class SellerLoginFragment : Fragment() {
                 // 2. Verify Seller Role
                 if (role == "seller") {
                     val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                    Log.d("SellerLogin", "Auth Success. Role: seller. UID: $uid")
 
                     // 3. Fetch Profile for personalization
                     authRepository.getSellerProfile(uid) { profile ->
@@ -89,7 +93,7 @@ class SellerLoginFragment : Fragment() {
                         Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_SHORT).show()
                         binding.btnLogin.isEnabled = true
 
-                        // REDIRECTION FIX: Ensure navigation happens correctly
+                        // REDIRECTION: Ensure navigation happens correctly
                         (activity as? MainActivity)?.navigationManager?.replaceFragment(
                             fragment = SellerHomeFragment(),
                             addToBackStack = false,
@@ -98,13 +102,16 @@ class SellerLoginFragment : Fragment() {
                     }
                 } else {
                     binding.btnLogin.isEnabled = true
-                    Toast.makeText(requireContext(), "This account is not a Seller account.", Toast.LENGTH_LONG).show()
+                    Log.w("SellerLogin", "Role Mismatch: Found $role instead of seller")
+                    Toast.makeText(requireContext(), "This account is registered as a $role, not a Seller.", Toast.LENGTH_LONG).show()
                     FirebaseAuth.getInstance().signOut()
                 }
             },
             onFailure = { errorMessage ->
                 if (isAdded) {
                     binding.btnLogin.isEnabled = true
+                    Log.e("SellerLogin", "Firebase Auth Failure: $errorMessage")
+                    // Now showing the ACTUAL error from Firebase
                     Toast.makeText(requireContext(), "Login failed: $errorMessage", Toast.LENGTH_LONG).show()
                 }
             },
@@ -113,7 +120,7 @@ class SellerLoginFragment : Fragment() {
 
     private fun validateInput(): Boolean {
         val identifier = binding.etIdentifier.text.toString().trim()
-        val password = binding.etPassword.text.toString().trim()
+        val password = binding.etPassword.text.toString()
 
         if (identifier.isEmpty()) {
             binding.tilIdentifier.error = "Email is required"

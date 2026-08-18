@@ -12,5 +12,6 @@ data class SellerProfile(
     val email: String = "",
     val photoUrl: String = "",
     val isApproved: Boolean = false,
+    val autoAcceptRequests: Boolean = false,
     val createdAt: Long = System.currentTimeMillis(),
 )

@@ -1,6 +1,7 @@
 package com.craftlanka.app.seller
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -159,6 +160,13 @@ class SellerHomeFragment : Fragment() {
         updateNavItemVisuals(nav.ivNavHome, nav.tvNavHome, true)
 
         nav.navHome.setOnClickListener { /* Already here */ }
+
+        nav.navRequests.setOnClickListener {
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = SellerRequestsFragment(),
+                addToBackStack = false
+            )
+        }
 
         nav.navProducts.setOnClickListener {
             (activity as? MainActivity)?.navigationManager?.replaceFragment(
