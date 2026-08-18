@@ -42,17 +42,17 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btn_profile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="@color/brand_green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:clickable="true"
-            android:focusable="true">
+            app:strokeColor="@color/brand_green"
+            app:strokeWidth="1dp">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -438,12 +438,13 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="200dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="24dp"
+                android:minHeight="30dp"
                 app:cardBackgroundColor="#1A1C19"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -456,17 +457,20 @@
                         android:layout_centerVertical="true"
                         android:layout_toStartOf="@+id/btn_manage_plan"
                         android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/label_current_plan"
                             android:textColor="#E5D7A1"
                             android:textSize="12sp" />
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
+
                             <TextView
                                 android:id="@+id/tv_current_plan_name"
                                 android:layout_width="wrap_content"
@@ -475,12 +479,14 @@
                                 android:textColor="@color/white"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
+
                             <ImageView
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:layout_marginStart="6dp"
                                 android:src="@drawable/ic_plan_badge" />
                         </LinearLayout>
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

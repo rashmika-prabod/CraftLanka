@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.craftlanka.app.MainActivity
 import com.craftlanka.app.R
 import com.craftlanka.app.data.AuthRepository
 import com.craftlanka.app.databinding.FragmentSellerHomeBinding
@@ -84,8 +85,11 @@ class SellerHomeFragment : Fragment() {
 
         // FAB Add Product Click -> Navigate to Add Product UI
         binding.fabAddProduct.setOnClickListener {
-            // TODO: Redirect to Add New Product UI (Navigation Logic to be added)
-            Toast.makeText(requireContext(), "Opening Add Product...", Toast.LENGTH_SHORT).show()
+            val mainActivity = requireActivity() as MainActivity
+            mainActivity.navigationManager.replaceFragment(
+                fragment = AddProductFragment(),
+                addToBackStack = true,
+            )
         }
 
         // View Inventory Button
