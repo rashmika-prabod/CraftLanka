@@ -98,6 +98,13 @@ class BuyerLoginFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (webClientId.isEmpty()) {
+            Toast.makeText(requireContext(), "Error: Web Client ID is missing. Check local.properties", Toast.LENGTH_LONG).show()
+            // Disable Google login if the ID is missing to avoid the crash
+            binding.btnGoogleLogin.isEnabled = false
+            return
+        }
+
         val gso =
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(webClientId)
