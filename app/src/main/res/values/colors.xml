@@ -7,4 +7,26 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Brand Colors -->
+    <color name="brand_green">#154212</color>
+    <color name="brand_green_dark">#0E3818</color>
+    <color name="brand_dark">#1B1D0E</color>
+    <color name="brand_brown">#8C3B00</color>
+
+    <!-- Navigation Colors -->
+    <color name="nav_active_bg">#FFA26A</color>
+    <color name="nav_active_content">#783603</color>
+    <color name="nav_inactive_content">#555555</color>
+
+    <!-- UI States -->
+    <color name="card_bg_red">#FEE2E2</color>
+    <color name="icon_bg_green">#ECF3E6</color>
+    <color name="icon_bg_red">#FEE2E2</color>
+    <color name="text_red">#DC2626</color>
+    <color name="text_grey">#42493E</color>
+
+    <!-- Pro Plan Styling -->
+    <color name="plan_card_bg">#1A1C19</color>
+    <color name="plan_accent">#E5D7A1</color>
 </resources>

@@ -86,7 +86,14 @@ class SellerLoginFragment : Fragment() {
                         Toast.makeText(requireContext(), "Welcome back, $displayName!", Toast.LENGTH_SHORT).show()
 
                         binding.btnLogin.isEnabled = true
-                        // TODO: Navigate to Seller Dashboard (HomeFragment or DashboardFragment)
+                        
+                        // FIX: Navigate to Seller Dashboard Home
+                        val mainActivity = requireActivity() as MainActivity
+                        mainActivity.navigationManager.replaceFragment(
+                            fragment = SellerHomeFragment(),
+                            addToBackStack = false,
+                            clearBackStack = true
+                        )
                     }
                 } else {
                     binding.btnLogin.isEnabled = true

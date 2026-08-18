@@ -85,6 +85,9 @@ dependencies {
     // Lottie Animation Library
     implementation("com.airbnb.android:lottie:6.4.0")
 
+    // Glide for image loading
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
     // Firebase BoM & Libraries
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
