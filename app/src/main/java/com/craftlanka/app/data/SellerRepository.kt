@@ -10,7 +10,6 @@ import com.craftlanka.app.model.Product
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SellerRepository {
-
     private val db = FirebaseFirestore.getInstance()
     private val productsRef = db.collection("products")
 
@@ -21,36 +20,53 @@ class SellerRepository {
         context: Context,
         imageUri: Uri,
         onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         try {
             MediaManager.get()
         } catch (e: Exception) {
-            val config = hashMapOf(
-                "cloud_name" to BuildConfig.CLOUDINARY_CLOUD_NAME,
-                "secure" to true
-            )
+            val config =
+                hashMapOf(
+                    "cloud_name" to BuildConfig.CLOUDINARY_CLOUD_NAME,
+                    "secure" to true,
+                )
             MediaManager.init(context, config)
         }
 
         MediaManager.get().upload(imageUri)
             .option("unsigned", true)
             .option("upload_preset", "craftlanka_preset") // Using the same preset as seller photos
-            .callback(object : UploadCallback {
-                override fun onStart(requestId: String?) {}
-                override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {}
-                
-                override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
-                    val url = resultData?.get("secure_url") as? String ?: ""
-                    onSuccess(url)
-                }
+            .callback(
+                object : UploadCallback {
+                    override fun onStart(requestId: String?) {}
 
-                override fun onError(requestId: String?, error: ErrorInfo?) {
-                    onFailure(error?.description ?: "Image upload failed")
-                }
+                    override fun onProgress(
+                        requestId: String?,
+                        bytes: Long,
+                        totalBytes: Long,
+                    ) {}
 
-                override fun onReschedule(requestId: String?, error: ErrorInfo?) {}
-            })
+                    override fun onSuccess(
+                        requestId: String?,
+                        resultData: MutableMap<Any?, Any?>?,
+                    ) {
+                        val url = resultData?.get("secure_url") as? String ?: ""
+                        onSuccess(url)
+                    }
+
+                    override fun onError(
+                        requestId: String?,
+                        error: ErrorInfo?,
+                    ) {
+                        onFailure(error?.description ?: "Image upload failed")
+                    }
+
+                    override fun onReschedule(
+                        requestId: String?,
+                        error: ErrorInfo?,
+                    ) {}
+                },
+            )
             .dispatch()
     }
 
@@ -60,11 +76,11 @@ class SellerRepository {
     fun addProduct(
         product: Product,
         onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         val docRef = productsRef.document()
         val finalProduct = product.copy(productId = docRef.id)
-        
+
         docRef.set(finalProduct)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { e -> onFailure(e.message ?: "Failed to save product") }

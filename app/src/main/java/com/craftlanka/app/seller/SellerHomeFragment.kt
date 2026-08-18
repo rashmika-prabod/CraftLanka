@@ -1,6 +1,5 @@
 package com.craftlanka.app.seller
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,6 @@ import com.craftlanka.app.databinding.ItemLowStockBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class SellerHomeFragment : Fragment() {
-
     private var bindingVar: FragmentSellerHomeBinding? = null
     private val binding get() = bindingVar!!
 

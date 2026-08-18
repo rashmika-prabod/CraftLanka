@@ -17,7 +17,6 @@ import com.craftlanka.app.model.Product
 import com.google.firebase.auth.FirebaseAuth
 
 class AddProductFragment : Fragment() {
-
     private var bindingVar: FragmentAddProductBinding? = null
     private val binding get() = bindingVar!!
 
@@ -27,18 +26,19 @@ class AddProductFragment : Fragment() {
     private var selectedImageUri: Uri? = null
 
     // Photo picker launcher for a single image selection
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            selectedImageUri = uri
-            
-            // UI Update: Show the selected image full-width and hide instructions
-            binding.ivProductImageFull.setImageURI(uri)
-            binding.ivProductImageFull.visibility = View.VISIBLE
-            binding.layoutUploadInstructions.visibility = View.GONE
-        } else {
-            Toast.makeText(requireContext(), "No media selected", Toast.LENGTH_SHORT).show()
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                selectedImageUri = uri
+
+                // UI Update: Show the selected image full-width and hide instructions
+                binding.ivProductImageFull.setImageURI(uri)
+                binding.ivProductImageFull.visibility = View.VISIBLE
+                binding.layoutUploadInstructions.visibility = View.GONE
+            } else {
+                Toast.makeText(requireContext(), "No media selected", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,7 +85,7 @@ class AddProductFragment : Fragment() {
                     Toast.makeText(requireContext(), "Please select a product photo", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-                
+
                 performPublish()
             }
         }
@@ -112,17 +112,18 @@ class AddProductFragment : Fragment() {
             context = requireContext(),
             imageUri = selectedImageUri!!,
             onSuccess = { imageUrl ->
-                
+
                 // 3. Create product object with the secure URL
-                val product = Product(
-                    sellerUid = currentUid,
-                    productName = name,
-                    description = desc,
-                    category = category,
-                    price = price,
-                    stockQuantity = stock,
-                    imageUrl = imageUrl
-                )
+                val product =
+                    Product(
+                        sellerUid = currentUid,
+                        productName = name,
+                        description = desc,
+                        category = category,
+                        price = price,
+                        stockQuantity = stock,
+                        imageUrl = imageUrl,
+                    )
 
                 // 4. Save to Firestore
                 sellerRepository.addProduct(
@@ -134,13 +135,13 @@ class AddProductFragment : Fragment() {
                     onFailure = { error ->
                         binding.btnPublish.isEnabled = true
                         Toast.makeText(requireContext(), "Database error: $error", Toast.LENGTH_LONG).show()
-                    }
+                    },
                 )
             },
             onFailure = { error ->
                 binding.btnPublish.isEnabled = true
                 Toast.makeText(requireContext(), "Image upload failed: $error", Toast.LENGTH_LONG).show()
-            }
+            },
         )
     }
 

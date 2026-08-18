@@ -9,7 +9,6 @@
     app:elevation="8dp"
     app:menu="@menu/seller_bottom_nav_menu"
     app:labelVisibilityMode="labeled"
-    app:itemIconTint="@color/nav_item_content_color"
-    app:itemTextColor="@color/nav_item_content_color"
-    app:itemActiveIndicatorStyle="@style/App.CustomIndicator"
+    app:itemIconTint="@null"
+    app:itemTextColor="@color/nav_icon_outline_selector"
     app:itemRippleColor="@color/nav_active_bg" />

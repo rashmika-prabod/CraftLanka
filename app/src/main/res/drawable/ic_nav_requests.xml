@@ -3,8 +3,13 @@
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-  <path
-      android:fillColor="#42493E"
-      android:fillType="evenOdd"
-      android:pathData="M20,4H4C2.9,4 2,4.9 2,6V16C2,17.1 2.9,18 4,18H10.5L12,20.5L13.5,18H20C21.1,18 22,17.1 22,16V6C22,4.9 21.1,4 20,4ZM19,6V16H13.17L12,17.17L10.83,16H5V6H19ZM7,10H9V12H7ZM11,10H13V12H11ZM15,10H17V12H15Z"/>
+    <!-- Inner Fill: Orange when active -->
+    <path
+        android:fillColor="@color/nav_item_fill_color"
+        android:pathData="M19,6V16H13.17L12,17.17L10.83,16H5V6H19Z" />
+    <!-- Outline & Dots: Brown when active -->
+    <path
+        android:fillColor="@color/nav_icon_outline_selector"
+        android:pathData="M20,4H4C2.9,4 2,4.9 2,6V16C2,17.1 2.9,18 4,18H10.5L12,20.5L13.5,18H20C21.1,18 22,17.1 22,16V6C22,4.9 21.1,4 20,4ZM19,6V16H13.17L12,17.17L10.83,16H5V6H19ZM7,10H9V12H7ZM11,10H13V12H11ZM15,10H17V12H15Z"
+        android:fillType="evenOdd" />
 </vector>
