@@ -105,6 +105,7 @@
                             app:cardCornerRadius="32dp"
                             app:cardElevation="0dp">
                             <ImageView
+                                android:id="@+id/iv_upload_icon"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:layout_gravity="center"

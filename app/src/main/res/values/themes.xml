@@ -20,7 +20,7 @@
         <item name="enableEdgeToEdge">true</item>
     </style>
 
-    <!-- Missing Styles Required by Restored Layouts -->
+    <!-- UI Styles Required by Layouts -->
     <style name="RoundedCorners">
         <item name="cornerSize">12dp</item>
     </style>
@@ -29,7 +29,7 @@
         <item name="cornerSize">8dp</item>
     </style>
 
-    <style name="ActiveIndicatorPill" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+    <style name="ActiveIndicatorPill" parent="">
         <item name="android:color">@color/nav_active_bg</item>
         <item name="android:width">44dp</item>
         <item name="android:height">32dp</item>
