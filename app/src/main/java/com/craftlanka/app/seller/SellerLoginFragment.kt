@@ -2,7 +2,6 @@ package com.craftlanka.app.seller
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,7 +73,7 @@ class SellerLoginFragment : Fragment() {
                 // 2. Verify Seller Role
                 if (role == "seller") {
                     val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-                    
+
                     // 3. Fetch Profile for personalization
                     authRepository.getSellerProfile(uid) { profile ->
                         if (!isAdded) return@getSellerProfile

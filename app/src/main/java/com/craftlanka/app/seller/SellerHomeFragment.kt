@@ -1,7 +1,6 @@
 package com.craftlanka.app.seller
 
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +26,7 @@ class SellerHomeFragment : Fragment() {
 
     private val authRepository = AuthRepository()
     private val sellerRepository = SellerRepository()
-    
+
     // Dynamic UID fetch to ensure we always have the current authenticated user
     private val currentUid: String
         get() = FirebaseAuth.getInstance().currentUser?.uid ?: ""
@@ -91,7 +90,7 @@ class SellerHomeFragment : Fragment() {
                 if (isAdded) {
                     Toast.makeText(requireContext(), "Error loading stats: $error", Toast.LENGTH_SHORT).show()
                 }
-            }
+            },
         )
     }
 
@@ -99,13 +98,13 @@ class SellerHomeFragment : Fragment() {
         val totalProducts = products.size
         val lowStockProducts = products.filter { it.stockQuantity <= 5 }
         val lowStockCount = lowStockProducts.size
-        
+
         // Placeholder for sales/revenue until Orders module is implemented
         updateDashboardStats(
             products = totalProducts,
             sales = 0,
             revenue = "0",
-            lowStockCount = lowStockCount
+            lowStockCount = lowStockCount,
         )
 
         displayLowStockList(lowStockProducts)
@@ -147,9 +146,9 @@ class SellerHomeFragment : Fragment() {
         }
 
         binding.btnViewInventory.setOnClickListener {
-             (activity as? MainActivity)?.navigationManager?.replaceFragment(
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
                 fragment = SellerProductsFragment(),
-                addToBackStack = true
+                addToBackStack = true,
             )
         }
     }
@@ -160,18 +159,18 @@ class SellerHomeFragment : Fragment() {
         updateNavItemVisuals(nav.ivNavHome, nav.tvNavHome, true)
 
         nav.navHome.setOnClickListener { /* Already here */ }
-        
+
         nav.navProducts.setOnClickListener {
             (activity as? MainActivity)?.navigationManager?.replaceFragment(
                 fragment = SellerProductsFragment(),
-                addToBackStack = false
+                addToBackStack = false,
             )
         }
-        
+
         nav.navInventory.setOnClickListener {
             (activity as? MainActivity)?.navigationManager?.replaceFragment(
                 fragment = SellerProductsFragment(),
-                addToBackStack = false
+                addToBackStack = false,
             )
         }
     }

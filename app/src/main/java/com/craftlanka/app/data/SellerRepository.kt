@@ -92,7 +92,7 @@ class SellerRepository {
     fun getSellerProducts(
         sellerUid: String,
         onSuccess: (List<Product>) -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         productsRef.whereEqualTo("sellerUid", sellerUid)
             .get()
@@ -111,7 +111,7 @@ class SellerRepository {
     fun getProduct(
         productId: String,
         onSuccess: (Product?) -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         productsRef.document(productId).get()
             .addOnSuccessListener { document ->
@@ -128,7 +128,7 @@ class SellerRepository {
     fun deleteProduct(
         productId: String,
         onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         if (productId.isEmpty()) return
         productsRef.document(productId).delete()

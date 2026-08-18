@@ -24,13 +24,13 @@ import com.google.firebase.auth.FirebaseAuth
 
 class SellerProductsFragment : Fragment() {
 
-    private var _binding: FragmentSellerProductsBinding? = null
-    private val binding get() = _binding!!
+    private var bindingVar: FragmentSellerProductsBinding? = null
+    private val binding get() = bindingVar!!
 
     private lateinit var productAdapter: SellerProductsAdapter
     private val authRepository = AuthRepository()
     private val sellerRepository = SellerRepository()
-    
+
     private val currentUid: String
         get() = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
@@ -39,9 +39,9 @@ class SellerProductsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentSellerProductsBinding.inflate(inflater, container, false)
+        bindingVar = FragmentSellerProductsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -66,19 +66,19 @@ class SellerProductsFragment : Fragment() {
             onUpdateClick = { product ->
                 (activity as? MainActivity)?.navigationManager?.replaceFragment(
                     fragment = AddProductFragment.newInstance(product.productId),
-                    addToBackStack = true
+                    addToBackStack = true,
                 )
             },
             onDeleteClick = { product ->
                 showDeleteConfirmation(product)
-            }
+            },
         )
         binding.rvSellerProducts.adapter = productAdapter
     }
 
     private fun showDeleteConfirmation(product: Product) {
         val dialogBinding = LayoutDeleteConfirmationModalBinding.inflate(layoutInflater)
-        
+
         val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.Theme_CraftLanka_Dialog_Transparent)
             .setView(dialogBinding.root)
             .setCancelable(true)
@@ -99,7 +99,8 @@ class SellerProductsFragment : Fragment() {
     }
 
     private fun performDelete(product: Product) {
-        sellerRepository.deleteProduct(product.productId,
+        sellerRepository.deleteProduct(
+            product.productId,
             onSuccess = {
                 if (isAdded) {
                     Toast.makeText(requireContext(), "Product deleted successfully", Toast.LENGTH_SHORT).show()
@@ -108,7 +109,7 @@ class SellerProductsFragment : Fragment() {
             },
             onFailure = { error ->
                 if (isAdded) Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
-            }
+            },
         )
     }
 
@@ -129,7 +130,8 @@ class SellerProductsFragment : Fragment() {
             return
         }
 
-        sellerRepository.getSellerProducts(uid,
+        sellerRepository.getSellerProducts(
+            uid,
             onSuccess = { products ->
                 if (isAdded) {
                     allProducts = products
@@ -138,7 +140,7 @@ class SellerProductsFragment : Fragment() {
             },
             onFailure = { error ->
                 if (isAdded) Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
-            }
+            },
         )
     }
 
@@ -151,7 +153,9 @@ class SellerProductsFragment : Fragment() {
     private fun setupSearch() {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { filterProducts() }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterProducts()
+            }
             override fun afterTextChanged(s: Editable?) {}
         })
     }
@@ -205,6 +209,6 @@ class SellerProductsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        bindingVar = null
     }
 }

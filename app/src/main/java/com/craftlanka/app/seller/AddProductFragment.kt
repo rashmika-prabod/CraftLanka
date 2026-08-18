@@ -96,7 +96,7 @@ class AddProductFragment : Fragment() {
                         binding.actvCategory.setText(product.category, false)
                         binding.etPrice.setText(product.price.toString())
                         binding.etStock.setText(product.stockQuantity.toString())
-                        
+
                         existingImageUrl = product.imageUrl
                         if (product.imageUrl.isNotEmpty()) {
                             binding.ivProductImageFull.visibility = View.VISIBLE
@@ -166,7 +166,7 @@ class AddProductFragment : Fragment() {
                 onFailure = { error ->
                     binding.btnPublish.isEnabled = true
                     Toast.makeText(requireContext(), "Image upload failed: $error", Toast.LENGTH_LONG).show()
-                }
+                },
             )
         } else {
             // Use existing image URL
@@ -183,7 +183,7 @@ class AddProductFragment : Fragment() {
             category = category,
             price = price,
             stockQuantity = stock,
-            imageUrl = imageUrl
+            imageUrl = imageUrl,
         )
 
         sellerRepository.addProduct(
@@ -196,7 +196,7 @@ class AddProductFragment : Fragment() {
             onFailure = { error ->
                 binding.btnPublish.isEnabled = true
                 Toast.makeText(requireContext(), "Database error: $error", Toast.LENGTH_LONG).show()
-            }
+            },
         )
     }
 
