@@ -30,4 +30,51 @@
     <!-- Pro Plan Styling -->
     <color name="plan_card_bg">#1A1C19</color>
     <color name="plan_accent">#E5D7A1</color>
+
+    <!-- Fix: Missing colors required by drawable assets and layouts -->
+    <color name="charcoal">#1A1C19</color>
+    <color name="mint_green">#D1FAE5</color>
+    <color name="header_forest_green">#154212</color>
+    <color name="light_blue_badge">#DBEAFE</color>
+    <color name="shipped_blue_bg">#E0F2FE</color>
+    <color name="background_cream">#FFFDF5</color>
+    <color name="light_green_fill">#ECF3E6</color>
+    <color name="dark_green">#154212</color>
+    <color name="delete_yellow_bg">#FEF9C3</color>
+    <color name="soft_red_logout">#FEE2E2</color>
+    <color name="light_gray">#F3F4F6</color>
+    <color name="light_gray_pill">#F3F4F6</color>
+    <color name="muted_gray">#9CA3AF</color>
+    <color name="checkout_background">#FFFFFF</color>
+    <color name="cart_background">#F9FAFB</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="warning_bg">#FFFBEB</color>
+    <color name="danger_red">#EF4444</color>
+
+    <!-- Order Status Backgrounds -->
+    <color name="status_pending_bg">#FEF3C7</color>
+    <color name="status_processing_bg">#E0F2FE</color>
+    <color name="status_shipped_bg">#DBEAFE</color>
+    <color name="status_delivered_bg">#D1FAE5</color>
+    <color name="status_cancelled_bg">#FEE2E2</color>
+
+    <!-- Order Status Text Colors -->
+    <color name="status_pending_text">#92400E</color>
+    <color name="status_processing_text">#0369A1</color>
+    <color name="status_shipped_text">#1D4ED8</color>
+    <color name="status_delivered_text">#065F46</color>
+    <color name="status_cancelled_text">#991B1B</color>
+
+    <!-- UI Elements Text & Accents -->
+    <color name="primary_blue">#2563EB</color>
+    <color name="light_blue_text">#3B82F6</color>
+    <color name="shipped_blue_text">#1D4ED8</color>
+    <color name="gold_accent">#E5D7A1</color>
+    <color name="dark_red_text">#991B1B</color>
+
+    <!-- Notification / Promo Colors -->
+    <color name="promo_blue_bg">#EFF6FF</color>
+    <color name="promo_blue_icon">#3B82F6</color>
+    <color name="price_drop_bg">#F0FDF4</color>
+    <color name="price_drop_icon">#22C55E</color>
 </resources>
