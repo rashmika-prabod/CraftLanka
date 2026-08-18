@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.craftlanka.app.databinding.ItemProductBinding
 
 class ProductAdapter(
@@ -31,6 +32,16 @@ class ProductAdapter(
             btnAddToCart.alpha = if (product.inStock) 1.0f else 0.5f
 
             btnAddToCart.setOnClickListener { onAddToCart(product) }
+
+            if (product.imageUrl.isNotBlank()) {
+                Glide.with(ivProductImage.context)
+                    .load(product.imageUrl)
+                    .centerCrop()
+                    .into(ivProductImage)
+            } else {
+                Glide.with(ivProductImage.context).clear(ivProductImage)
+                ivProductImage.setImageDrawable(null)
+            }
         }
     }
 
