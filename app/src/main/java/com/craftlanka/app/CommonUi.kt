@@ -33,6 +33,7 @@ data class Product(
     val reviews: Int,
     val category: String,
     val inStock: Boolean = true,
+    val imageUrl: String = "",
 )
 
 data class UserAddress(
