@@ -13,6 +13,7 @@
     <color name="brand_green_dark">#0E3818</color>
     <color name="brand_dark">#1B1D0E</color>
     <color name="brand_brown">#8C3B00</color>
+    <color name="brand_orange">#FFA26A</color>
 
     <!-- Navigation Colors -->
     <color name="nav_active_bg">#FFA26A</color>
