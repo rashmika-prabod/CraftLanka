@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.craftlanka.app.MainActivity
@@ -38,9 +41,8 @@ class SellerHomeFragment : Fragment() {
 
         loadSellerProfile()
         setupListeners()
-        setupBottomNavigation()
+        setupCustomBottomNavigation()
 
-        // Initial mock data for the UI demonstration as per Figma design
         updateDashboardStats(
             products = 42,
             sales = 128,
@@ -56,7 +58,6 @@ class SellerHomeFragment : Fragment() {
 
         authRepository.getSellerProfile(currentUid) { profile ->
             if (isAdded && profile != null) {
-                // 1. Handle Profile Image or Initial based on registration data
                 if (profile.photoUrl.isNotEmpty()) {
                     binding.ivProfilePhoto.visibility = View.VISIBLE
                     binding.tvProfileInitial.visibility = View.GONE
@@ -75,13 +76,11 @@ class SellerHomeFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        // Header Profile Click -> Navigate to Profile UI
         binding.btnProfile.setOnClickListener {
-            // TODO: Redirect to Profile UI (Navigation Logic to be added)
             Toast.makeText(requireContext(), "Opening Profile...", Toast.LENGTH_SHORT).show()
         }
 
-        // FAB Add Product Click -> Navigate to Add Product UI
+        // NAVIGATION: Home -> Add Product
         binding.fabAddProduct.setOnClickListener {
             val mainActivity = requireActivity() as MainActivity
             mainActivity.navigationManager.replaceFragment(
@@ -90,48 +89,64 @@ class SellerHomeFragment : Fragment() {
             )
         }
 
-        // View Inventory Button
         binding.btnViewInventory.setOnClickListener {
-            // TODO: Redirect to Inventory UI
             Toast.makeText(requireContext(), "Opening Inventory...", Toast.LENGTH_SHORT).show()
         }
 
-        // Manage Plan Button
         binding.btnManagePlan.setOnClickListener {
-            // TODO: Redirect to Subscription Management
             Toast.makeText(requireContext(), "Opening Plan Management...", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun setupBottomNavigation() {
-        // Ensure 'Home' is highlighted in the bottom navigation bar
-        binding.includeBottomNav.sellerBottomNav.selectedItemId = R.id.nav_home
+    private fun setupCustomBottomNavigation() {
+        val nav = binding.includeBottomNav
+        resetAllNavItems()
+        updateNavItemVisuals(nav.ivNavHome, nav.tvNavHome, true)
 
-        binding.includeBottomNav.sellerBottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> true
-                R.id.nav_requests -> {
-                    // TODO: Navigate to Requests Screen
-                    false
-                }
-                R.id.nav_products -> {
-                    // TODO: Navigate to Products Screen
-                    false
-                }
-                R.id.nav_analytics -> {
-                    // TODO: Navigate to Analytics Screen
-                    false
-                }
-                R.id.nav_inventory -> {
-                    // TODO: Navigate to Inventory Screen
-                    false
-                }
-                R.id.nav_profile -> {
-                    // TODO: Navigate to Profile Screen
-                    false
-                }
-                else -> false
-            }
+        nav.navHome.setOnClickListener {
+            resetAllNavItems()
+            updateNavItemVisuals(nav.ivNavHome, nav.tvNavHome, true)
+        }
+        nav.navRequests.setOnClickListener {
+            resetAllNavItems()
+            updateNavItemVisuals(nav.ivNavRequests, nav.tvNavRequests, true)
+        }
+        nav.navProducts.setOnClickListener {
+            resetAllNavItems()
+            updateNavItemVisuals(nav.ivNavProducts, nav.tvNavProducts, true)
+        }
+        nav.navAnalytics.setOnClickListener {
+            resetAllNavItems()
+            updateNavItemVisuals(nav.ivNavAnalytics, nav.tvNavAnalytics, true)
+        }
+        nav.navInventory.setOnClickListener {
+            resetAllNavItems()
+            updateNavItemVisuals(nav.ivNavInventory, nav.tvNavInventory, true)
+        }
+        nav.navProfile.setOnClickListener {
+            resetAllNavItems()
+            updateNavItemVisuals(nav.ivNavProfile, nav.tvNavProfile, true)
+        }
+    }
+
+    private fun resetAllNavItems() {
+        val nav = binding.includeBottomNav
+        updateNavItemVisuals(nav.ivNavHome, nav.tvNavHome, false)
+        updateNavItemVisuals(nav.ivNavRequests, nav.tvNavRequests, false)
+        updateNavItemVisuals(nav.ivNavProducts, nav.tvNavProducts, false)
+        updateNavItemVisuals(nav.ivNavAnalytics, nav.tvNavAnalytics, false)
+        updateNavItemVisuals(nav.ivNavInventory, nav.tvNavInventory, false)
+        updateNavItemVisuals(nav.ivNavProfile, nav.tvNavProfile, false)
+    }
+
+    private fun updateNavItemVisuals(icon: ImageView, label: TextView, isSelected: Boolean) {
+        val context = requireContext()
+        if (isSelected) {
+            icon.setImageState(intArrayOf(android.R.attr.state_checked), true)
+            label.setTextColor(ContextCompat.getColor(context, R.color.nav_active_content))
+        } else {
+            icon.setImageState(intArrayOf(), true)
+            label.setTextColor(ContextCompat.getColor(context, R.color.nav_inactive_content))
         }
     }
 
@@ -148,7 +163,6 @@ class SellerHomeFragment : Fragment() {
     }
 
     private fun setupLowStockList() {
-        // Real logic will fetch these from Firestore, using mock data for UI demo
         val lowStockItems =
             listOf(
                 Pair("Traditional Clay Water Jug", "2"),
