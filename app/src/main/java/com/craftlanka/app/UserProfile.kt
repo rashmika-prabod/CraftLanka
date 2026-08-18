@@ -2,7 +2,6 @@ package com.craftlanka.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -12,18 +11,22 @@ import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.craftlanka.app.data.AuthRepository
+import com.craftlanka.app.databinding.ActivityUserProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class UserProfile : AppCompatActivity() {
 
+    private lateinit var binding: ActivityUserProfileBinding
     private val authRepository = AuthRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_user_profile)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        binding = ActivityUserProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
@@ -34,12 +37,20 @@ class UserProfile : AppCompatActivity() {
         setupMenuItems()
         setupBottomNavigation()
 
-        findViewById<View>(R.id.btn_logout).setOnClickListener {
+        binding.btnEditProfile.setOnClickListener {
+            startActivity(Intent(this, EditProfileActivity::class.java))
+        }
+
+        binding.btnLogout.setOnClickListener {
             logout()
         }
 
-        findViewById<View>(R.id.delete_account_card).setOnClickListener {
+        binding.deleteAccountCard.setOnClickListener {
             Toast.makeText(this, "Delete Account clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.rowAddPaymentMethod.setOnClickListener {
+            startActivity(Intent(this, AddCardActivity::class.java))
         }
     }
 
@@ -58,8 +69,9 @@ class UserProfile : AppCompatActivity() {
         }
 
         authRepository.getBuyerProfile(uid) { profile ->
-            val nameView = findViewById<TextView>(R.id.tv_user_name)
-            nameView.text = profile?.fullName?.ifBlank { "Buyer" } ?: "Buyer"
+            binding.tvUserName.text = profile?.fullName?.ifBlank { "Buyer" } ?: "Buyer"
+            binding.tvUserEmail.text = profile?.email.orEmpty()
+            binding.tvUserPhone.text = profile?.phone.orEmpty()
         }
     }
 
@@ -88,70 +100,70 @@ class UserProfile : AppCompatActivity() {
 
     private fun setupNotificationSwitches() {
         // Order Updates
-        findViewById<View>(R.id.row_order_updates).apply {
+        binding.rowOrderUpdates.apply {
             findViewById<TextView>(R.id.tv_label).text = "Order Updates"
             findViewById<SwitchCompat>(R.id.switch_action).isChecked = true
         }
 
         // Deals & Promotions
-        findViewById<View>(R.id.row_deals).apply {
+        binding.rowDeals.apply {
             findViewById<TextView>(R.id.tv_label).text = "Deals & Promotions"
             findViewById<SwitchCompat>(R.id.switch_action).isChecked = true
         }
 
         // Wishlist Alerts
-        findViewById<View>(R.id.row_wishlist).apply {
+        binding.rowWishlist.apply {
             findViewById<TextView>(R.id.tv_label).text = "Wishlist Alerts"
             findViewById<SwitchCompat>(R.id.switch_action).isChecked = true
         }
 
         // Seller Messages
-        findViewById<View>(R.id.row_messages).apply {
+        binding.rowMessages.apply {
             findViewById<TextView>(R.id.tv_label).text = "Seller Messages"
             findViewById<SwitchCompat>(R.id.switch_action).isChecked = true
         }
 
         // Review Reminders
-        findViewById<View>(R.id.row_reviews).apply {
+        binding.rowReviews.apply {
             findViewById<TextView>(R.id.tv_label).text = "Review Reminders"
             findViewById<SwitchCompat>(R.id.switch_action).isChecked = false
         }
     }
 
     private fun setupMenuItems() {
-        findViewById<View>(R.id.menu_privacy).apply {
+        binding.menuPrivacy.apply {
             findViewById<TextView>(R.id.tv_menu_label).text = "Privacy & Security"
         }
-        findViewById<View>(R.id.menu_language).apply {
+        binding.menuLanguage.apply {
             findViewById<TextView>(R.id.tv_menu_label).text = "Language & Region"
         }
-        findViewById<View>(R.id.menu_appearance).apply {
+        binding.menuAppearance.apply {
             findViewById<TextView>(R.id.tv_menu_label).text = "Appearance"
         }
-        findViewById<View>(R.id.menu_help).apply {
+        binding.menuHelp.apply {
             findViewById<TextView>(R.id.tv_menu_label).text = "Help & Support"
         }
-        findViewById<View>(R.id.menu_terms).apply {
+        binding.menuTerms.apply {
             findViewById<TextView>(R.id.tv_menu_label).text = "Terms & Privacy"
         }
     }
 
     private fun setupBottomNavigation() {
-        findViewById<View>(R.id.btnNavExplore).setOnClickListener {
+        binding.btnNavExplore.setOnClickListener {
             val intent = Intent(this, MainDisplay::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
             startActivity(intent)
             finish()
         }
-        findViewById<View>(R.id.btnNavNotification).setOnClickListener {
+        binding.btnNavNotification.setOnClickListener {
             startActivity(Intent(this, Notification::class.java))
             finish()
         }
-        findViewById<View>(R.id.btnNavOrders).setOnClickListener {
+        binding.btnNavOrders.setOnClickListener {
             startActivity(Intent(this, Order::class.java))
             finish()
         }
-        findViewById<View>(R.id.btnNavCart).setOnClickListener {
+        binding.btnNavCart.setOnClickListener {
             startActivity(Intent(this, Cart::class.java))
             finish()
         }
