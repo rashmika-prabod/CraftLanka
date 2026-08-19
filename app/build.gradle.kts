@@ -104,6 +104,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Coil for Jetpack Compose image loading
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
     // Lottie Animation Library
     implementation("com.airbnb.android:lottie:6.4.0")
 

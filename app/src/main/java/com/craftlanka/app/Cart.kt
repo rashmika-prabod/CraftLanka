@@ -17,12 +17,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.craftlanka.app.ui.theme.CraftLankaTheme
 
 class Cart : ComponentActivity() {
@@ -196,11 +199,34 @@ fun CartItem(product: Product) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(checked = true, onCheckedChange = {})
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .background(Color.LightGray.copy(0.2f), RoundedCornerShape(8.dp)),
-        )
+
+        // Product Image Loading via Coil
+        if (product.imageUrl.isNotBlank()) {
+            AsyncImage(
+                model = product.imageUrl,
+                contentDescription = product.title,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.LightGray.copy(0.2f)),
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.LightGray.copy(0.3f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ShoppingCart,
+                    contentDescription = null,
+                    tint = Color.Gray,
+                )
+            }
+        }
+
         Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(product.title, fontWeight = FontWeight.Bold)
