@@ -74,7 +74,10 @@ class SellerAnalyticsFragment : Fragment() {
         }
 
         binding.btnProfileHeader.setOnClickListener {
-            Toast.makeText(requireContext(), "Profile feature coming soon", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = SellerProfileFragment(),
+                addToBackStack = true,
+            )
         }
     }
 
@@ -205,6 +208,9 @@ class SellerAnalyticsFragment : Fragment() {
         }
         nav.navInventory.setOnClickListener {
             (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerInventoryFragment(), false)
+        }
+        nav.navProfile.setOnClickListener {
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerProfileFragment(), false)
         }
     }
 

@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 class SellerProductsFragment : Fragment() {
 
     private var bindingVar: FragmentSellerProductsBinding? = null
-    private val binding get() = bindingVar!!
+    val binding get() = bindingVar!!
 
     private lateinit var productAdapter: SellerProductsAdapter
     private val authRepository = AuthRepository()
@@ -56,7 +56,10 @@ class SellerProductsFragment : Fragment() {
         setupSearch()
 
         binding.btnProfileHeader.setOnClickListener {
-            Toast.makeText(requireContext(), "Profile feature coming soon", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = SellerProfileFragment(),
+                addToBackStack = true,
+            )
         }
     }
 
@@ -201,7 +204,7 @@ class SellerProductsFragment : Fragment() {
             (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerInventoryFragment(), false)
         }
         nav.navProfile.setOnClickListener {
-            Toast.makeText(requireContext(), "Profile coming soon", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerProfileFragment(), false)
         }
     }
 

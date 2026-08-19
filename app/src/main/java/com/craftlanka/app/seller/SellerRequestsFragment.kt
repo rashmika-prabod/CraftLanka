@@ -57,7 +57,10 @@ class SellerRequestsFragment : Fragment() {
         setupAutoAcceptToggle()
 
         binding.btnProfileHeader.setOnClickListener {
-            Toast.makeText(requireContext(), "Profile feature coming soon", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = SellerProfileFragment(),
+                addToBackStack = true,
+            )
         }
     }
 
@@ -289,7 +292,7 @@ class SellerRequestsFragment : Fragment() {
             (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerInventoryFragment(), false)
         }
         nav.navProfile.setOnClickListener {
-            Toast.makeText(requireContext(), "Profile coming soon", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerProfileFragment(), false)
         }
     }
 

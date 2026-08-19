@@ -133,7 +133,10 @@ class SellerHomeFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnProfile.setOnClickListener {
-            Toast.makeText(requireContext(), "Profile opening soon", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = SellerProfileFragment(),
+                addToBackStack = true,
+            )
         }
 
         binding.fabAddProduct.setOnClickListener {
@@ -175,7 +178,10 @@ class SellerHomeFragment : Fragment() {
         }
 
         nav.navProfile.setOnClickListener {
-            Toast.makeText(requireContext(), "Profile coming soon", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = SellerProfileFragment(),
+                addToBackStack = false,
+            )
         }
     }
 
