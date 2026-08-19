@@ -13,7 +13,7 @@ androidxActivityCompose = "1.9.3"
 androidxLifecycle = "2.8.7"
 firebaseBom = "33.1.2"
 cloudinary = "3.0.2"
-activity = "1.9.3"
+activity = "1.13.0"
 constraintlayout = "2.2.2"
 compose-compiler = "2.1.0"
 
