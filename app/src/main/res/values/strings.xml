@@ -149,7 +149,7 @@
     <!-- Seller Login Strings -->
     <string name="seller_login_title">Seller Login</string>
     <string name="seller_login_subtitle">Manage your handmade craft business</string>
-    <string name="hint_seller_identifier">e.g. name@example.com</string>
+    <string name="hint_seller_identifier">e.g. 0712345678</string>
     <string name="new_seller_prompt">New Seller?</string>
     <string name="secured_by_craft_council">Secured by Sri Lankan Craft Council</string>
 
@@ -202,4 +202,7 @@
     <string name="label_yesterday">Yesterday, %1$s</string>
     <string name="btn_accept">ACCEPT</string>
     <string name="btn_reject">REJECT</string>
+
+    <!-- Store Analytics Strings -->
+    <string name="format_sales_info">%1$s • %2$d Sold</string>
 </resources>

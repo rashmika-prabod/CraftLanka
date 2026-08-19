@@ -103,9 +103,23 @@ class AuthRepository {
             .addOnFailureListener { e -> onFailure(e.message ?: "Seller registration failed") }
     }
 
+    fun updateSellerProfile(
+        profile: SellerProfile,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit,
+    ) {
+        if (profile.uid.isEmpty()) {
+            onFailure("User ID is empty")
+            return
+        }
+        db.collection("seller_profiles").document(profile.uid).set(profile)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e.message ?: "Failed to update profile") }
+    }
+
     // --- PHOTO UPLOAD (Using Cloudinary) ---
 
-    fun uploadSellerPhoto(
+    fun uploadPhoto(
         context: Context,
         imageUri: Uri,
         // returns the URL string
@@ -169,12 +183,12 @@ class AuthRepository {
         onFailure: (String) -> Unit,
     ) {
         Log.d("AuthRepo", "Login request for: $email")
-        
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener { authResult ->
                 val uid = authResult.user?.uid ?: ""
                 Log.d("AuthRepo", "Firebase Auth Success. UID: $uid")
-                
+
                 db.collection("users").document(uid).get()
                     .addOnSuccessListener { document ->
                         if (document.exists()) {
@@ -191,9 +205,9 @@ class AuthRepository {
                         onFailure(e.message ?: "Failed to fetch user role from database")
                     }
             }
-            .addOnFailureListener { e -> 
+            .addOnFailureListener { e ->
                 Log.e("AuthRepo", "Firebase Auth Failure: ${e.message}")
-                onFailure(e.message ?: "Login failed") 
+                onFailure(e.message ?: "Login failed")
             }
     }
 

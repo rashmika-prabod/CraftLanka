@@ -8,7 +8,6 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -96,14 +95,16 @@ class SellerRegisterFragment : Fragment() {
         Toast.makeText(requireContext(), "Creating your account...", Toast.LENGTH_SHORT).show()
 
         if (selectedImageUri != null) {
-            authRepository.uploadSellerPhoto(requireContext(), selectedImageUri!!,
-                onSuccess = { photoUrl ->
+            authRepository.uploadPhoto(
+                requireContext(),
+                selectedImageUri!!,
+                onSuccess = { photoUrl: String ->
                     registerWithProfile(photoUrl)
                 },
-                onFailure = { error ->
+                onFailure = { error: String ->
                     binding.btnCreateAccount.isEnabled = true
                     Toast.makeText(requireContext(), "Photo upload failed: $error", Toast.LENGTH_SHORT).show()
-                }
+                },
             )
         } else {
             registerWithProfile("")
@@ -123,10 +124,12 @@ class SellerRegisterFragment : Fragment() {
             city = binding.etCity.text.toString().trim(),
             country = binding.etCountry.text.toString().trim(),
             email = email,
-            photoUrl = photoUrl
+            photoUrl = photoUrl,
         )
 
-        authRepository.registerSeller(profile, password,
+        authRepository.registerSeller(
+            profile,
+            password,
             onSuccess = {
                 if (isAdded) {
                     val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -136,7 +139,7 @@ class SellerRegisterFragment : Fragment() {
                     mainActivity.navigationManager.replaceFragment(
                         fragment = RegistrationSuccessFragment.newInstance(getString(R.string.btn_login_to_your_shop)),
                         addToBackStack = false,
-                        clearBackStack = true
+                        clearBackStack = true,
                     )
                 }
             },
@@ -145,13 +148,13 @@ class SellerRegisterFragment : Fragment() {
                     binding.btnCreateAccount.isEnabled = true
                     Toast.makeText(requireContext(), "Registration failed: $error", Toast.LENGTH_LONG).show()
                 }
-            }
+            },
         )
     }
 
     private fun openPhotoPicker() {
         photoPickerLauncher.launch(
-            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
         )
     }
 
@@ -210,11 +213,26 @@ class SellerRegisterFragment : Fragment() {
         val password = binding.etPassword.text.toString()
         val confirmPassword = binding.etConfirmPassword.text.toString()
 
-        if (ownerName.isEmpty()) { binding.tilOwnerName.error = "Required"; return false }
-        if (email.isEmpty()) { binding.tilEmail.error = "Required"; return false }
-        if (password.length < 8) { binding.tilPassword.error = "Min 8 chars"; return false }
-        if (password != confirmPassword) { binding.tilConfirmPassword.error = "Mismatch"; return false }
-        if (!binding.cbTerms.isChecked) { Toast.makeText(requireContext(), "Accept terms", Toast.LENGTH_SHORT).show(); return false }
+        if (ownerName.isEmpty()) {
+            binding.tilOwnerName.error = "Required"
+            return false
+        }
+        if (email.isEmpty()) {
+            binding.tilEmail.error = "Required"
+            return false
+        }
+        if (password.length < 8) {
+            binding.tilPassword.error = "Min 8 chars"
+            return false
+        }
+        if (password != confirmPassword) {
+            binding.tilConfirmPassword.error = "Mismatch"
+            return false
+        }
+        if (!binding.cbTerms.isChecked) {
+            Toast.makeText(requireContext(), "Accept terms", Toast.LENGTH_SHORT).show()
+            return false
+        }
 
         return true
     }

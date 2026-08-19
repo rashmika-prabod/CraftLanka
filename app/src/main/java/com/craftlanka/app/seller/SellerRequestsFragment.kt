@@ -1,10 +1,6 @@
 package com.craftlanka.app.seller
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +40,7 @@ class SellerRequestsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         bindingVar = FragmentSellerRequestsBinding.inflate(inflater, container, false)
         return binding.root
@@ -69,7 +65,7 @@ class SellerRequestsFragment : Fragment() {
         requestsAdapter = SellerRequestsAdapter(
             requests = emptyList(),
             onAccept = { request -> handleManualAccept(request) },
-            onReject = { request -> showRejectionModal(request) }
+            onReject = { request -> showRejectionModal(request) },
         )
         binding.rvRequests.adapter = requestsAdapter
     }
@@ -92,7 +88,7 @@ class SellerRequestsFragment : Fragment() {
             if (isAdded && profile != null) {
                 isAutoAcceptEnabled = profile.autoAcceptRequests
                 binding.switchAutoAccept.isChecked = isAutoAcceptEnabled
-                
+
                 if (profile.photoUrl.isNotEmpty()) {
                     Glide.with(this)
                         .load(profile.photoUrl)
@@ -107,7 +103,8 @@ class SellerRequestsFragment : Fragment() {
         val uid = currentUid
         if (uid.isEmpty()) return
 
-        sellerRepository.getSellerRequests(uid,
+        sellerRepository.getSellerRequests(
+            uid,
             onSuccess = { requests ->
                 if (isAdded) {
                     allRequests = requests.sortedBy { it.timestamp }
@@ -120,14 +117,16 @@ class SellerRequestsFragment : Fragment() {
             },
             onFailure = { error ->
                 if (isAdded) Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
-            }
+            },
         )
     }
 
     private fun setupAutoAcceptToggle() {
         binding.switchAutoAccept.setOnCheckedChangeListener { _, isChecked ->
             isAutoAcceptEnabled = isChecked
-            sellerRepository.updateAutoAcceptPreference(currentUid, isChecked,
+            sellerRepository.updateAutoAcceptPreference(
+                currentUid,
+                isChecked,
                 onSuccess = {
                     if (isAdded && isChecked) {
                         processAutoAccept()
@@ -135,7 +134,7 @@ class SellerRequestsFragment : Fragment() {
                 },
                 onFailure = { error ->
                     if (isAdded) Toast.makeText(requireContext(), "Failed: $error", Toast.LENGTH_SHORT).show()
-                }
+                },
             )
         }
     }
@@ -147,13 +146,14 @@ class SellerRequestsFragment : Fragment() {
             return
         }
 
-        sellerRepository.getSellerProducts(currentUid,
+        sellerRepository.getSellerProducts(
+            currentUid,
             onSuccess = { products ->
                 if (isAdded) {
                     autoProcessRequestsSequentially(pendingRequests, products)
                 }
             },
-            onFailure = { filterRequestsByTab(binding.tabLayoutRequests.selectedTabPosition) }
+            onFailure = { filterRequestsByTab(binding.tabLayoutRequests.selectedTabPosition) },
         )
     }
 
@@ -165,17 +165,20 @@ class SellerRequestsFragment : Fragment() {
         for (request in pending) {
             val availableStock = stockMap[request.productId] ?: 0
             if (availableStock >= request.quantity) {
-                sellerRepository.acceptRequest(request,
+                sellerRepository.acceptRequest(
+                    request,
                     onSuccess = {
                         stockMap[request.productId] = availableStock - request.quantity
                         checkProcessingComplete(++processedCount, totalToProcess)
                     },
-                    onFailure = { checkProcessingComplete(++processedCount, totalToProcess) }
+                    onFailure = { checkProcessingComplete(++processedCount, totalToProcess) },
                 )
             } else {
-                sellerRepository.rejectRequest(request.requestId, "Stock unavailable",
+                sellerRepository.rejectRequest(
+                    request.requestId,
+                    "Stock unavailable",
                     onSuccess = { checkProcessingComplete(++processedCount, totalToProcess) },
-                    onFailure = { checkProcessingComplete(++processedCount, totalToProcess) }
+                    onFailure = { checkProcessingComplete(++processedCount, totalToProcess) },
                 )
             }
         }
@@ -183,19 +186,20 @@ class SellerRequestsFragment : Fragment() {
 
     private fun checkProcessingComplete(processed: Int, total: Int) {
         if (processed == total) {
-            fetchRequests() 
+            fetchRequests()
         }
     }
 
     private fun handleManualAccept(request: BuyerRequest) {
-        sellerRepository.acceptRequest(request,
+        sellerRepository.acceptRequest(
+            request,
             onSuccess = {
                 Toast.makeText(requireContext(), "Request accepted", Toast.LENGTH_SHORT).show()
                 fetchRequests()
             },
             onFailure = { error ->
                 Toast.makeText(requireContext(), "Failed to accept: $error", Toast.LENGTH_SHORT).show()
-            }
+            },
         )
     }
 
@@ -212,22 +216,24 @@ class SellerRequestsFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please select a reason", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            
-            val reason = when(selectedId) {
+
+            val reason = when (selectedId) {
                 R.id.rb_stock_unavailable -> "Stock unavailable"
                 R.id.rb_delivery_restricted -> "Delivery zone restricted"
                 R.id.rb_customization_impossible -> "Customization not possible"
                 else -> "Other reason"
             }
 
-            sellerRepository.rejectRequest(request.requestId, reason,
+            sellerRepository.rejectRequest(
+                request.requestId,
+                reason,
                 onSuccess = {
                     dialog.dismiss()
                     fetchRequests()
                 },
                 onFailure = { error ->
                     Toast.makeText(requireContext(), "Failed to reject: $error", Toast.LENGTH_SHORT).show()
-                }
+                },
             )
         }
         dialog.show()
@@ -242,8 +248,8 @@ class SellerRequestsFragment : Fragment() {
         }
 
         requestsAdapter.updateData(filtered)
-        
-        binding.tvListTitle.text = when(position) {
+
+        binding.tvListTitle.text = when (position) {
             0 -> getString(R.string.title_active_requests)
             1 -> getString(R.string.title_confirmed_orders)
             else -> getString(R.string.title_rejected_requests)
@@ -251,12 +257,12 @@ class SellerRequestsFragment : Fragment() {
 
         binding.tvListSubtitle.visibility = if (position == 1) View.VISIBLE else View.GONE
         binding.tvListSubtitle.text = getString(R.string.subtitle_confirmed_orders)
-        
+
         binding.layoutAcceptedFooter.visibility = if (position == 1 && filtered.isNotEmpty()) View.VISIBLE else View.GONE
         if (position == 1) {
             binding.tvAcceptedCountMessage.text = getString(R.string.format_accepted_requests_weekly, filtered.size)
         }
-        
+
         binding.cardAutoAccept.visibility = if (position == 0) View.VISIBLE else View.GONE
         binding.layoutEmptyState.visibility = if (filtered.isEmpty()) View.VISIBLE else View.GONE
         binding.rvRequests.visibility = if (filtered.isEmpty()) View.GONE else View.VISIBLE
@@ -270,11 +276,20 @@ class SellerRequestsFragment : Fragment() {
         nav.navHome.setOnClickListener {
             (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerHomeFragment(), false)
         }
+        nav.navRequests.setOnClickListener {
+            // Already here
+        }
         nav.navProducts.setOnClickListener {
             (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerProductsFragment(), false)
         }
+        nav.navAnalytics.setOnClickListener {
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerAnalyticsFragment(), false)
+        }
         nav.navInventory.setOnClickListener {
-            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerProductsFragment(), false)
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerInventoryFragment(), false)
+        }
+        nav.navProfile.setOnClickListener {
+            Toast.makeText(requireContext(), "Profile coming soon", Toast.LENGTH_SHORT).show()
         }
     }
 

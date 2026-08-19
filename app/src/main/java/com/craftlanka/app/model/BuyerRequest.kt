@@ -10,7 +10,8 @@ data class BuyerRequest(
     val price: Double = 0.0,
     val location: String = "",
     val timestamp: Long = System.currentTimeMillis(),
-    val status: String = "PENDING", // PENDING, ACCEPTED, REJECTED
+    // status can be: PENDING, ACCEPTED, REJECTED
+    val status: String = "PENDING",
     val rejectionReason: String = "",
-    val imageUrl: String = ""
+    val imageUrl: String = "",
 )

@@ -9,7 +9,6 @@ import com.craftlanka.app.BuildConfig
 import com.craftlanka.app.model.BuyerRequest
 import com.craftlanka.app.model.Product
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FieldValue
 
 class SellerRepository {
     private val db = FirebaseFirestore.getInstance()
@@ -146,7 +145,7 @@ class SellerRepository {
     fun getSellerRequests(
         sellerUid: String,
         onSuccess: (List<BuyerRequest>) -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         requestsRef.whereEqualTo("sellerUid", sellerUid)
             .get()
@@ -165,7 +164,7 @@ class SellerRepository {
     fun acceptRequest(
         request: BuyerRequest,
         onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         val requestDoc = requestsRef.document(request.requestId)
         val productDoc = productsRef.document(request.productId)
@@ -173,7 +172,7 @@ class SellerRepository {
         db.runTransaction { transaction ->
             val productSnapshot = transaction.get(productDoc)
             val currentStock = productSnapshot.getLong("stockQuantity") ?: 0L
-            
+
             if (currentStock >= request.quantity) {
                 transaction.update(requestDoc, "status", "ACCEPTED")
                 transaction.update(productDoc, "stockQuantity", currentStock - request.quantity)
@@ -182,7 +181,7 @@ class SellerRepository {
                 throw Exception("Insufficient stock")
             }
         }.addOnSuccessListener { onSuccess() }
-        .addOnFailureListener { e -> onFailure(e.message ?: "Failed to accept request") }
+            .addOnFailureListener { e -> onFailure(e.message ?: "Failed to accept request") }
     }
 
     /**
@@ -192,11 +191,11 @@ class SellerRepository {
         requestId: String,
         rejectionReason: String,
         onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         val updates = hashMapOf<String, Any>(
             "status" to "REJECTED",
-            "rejectionReason" to rejectionReason
+            "rejectionReason" to rejectionReason,
         )
         requestsRef.document(requestId).update(updates)
             .addOnSuccessListener { onSuccess() }
@@ -210,7 +209,7 @@ class SellerRepository {
         sellerUid: String,
         autoAccept: Boolean,
         onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
+        onFailure: (String) -> Unit,
     ) {
         sellerProfilesRef.document(sellerUid).update("autoAcceptRequests", autoAccept)
             .addOnSuccessListener { onSuccess() }

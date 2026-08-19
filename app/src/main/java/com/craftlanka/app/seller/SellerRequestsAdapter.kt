@@ -17,7 +17,7 @@ import java.util.Locale
 class SellerRequestsAdapter(
     private var requests: List<BuyerRequest>,
     private val onAccept: (BuyerRequest) -> Unit,
-    private val onReject: (BuyerRequest) -> Unit
+    private val onReject: (BuyerRequest) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {

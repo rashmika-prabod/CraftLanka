@@ -1,7 +1,6 @@
 package com.craftlanka.app.seller
 
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +27,6 @@ class SellerHomeFragment : Fragment() {
     private val authRepository = AuthRepository()
     private val sellerRepository = SellerRepository()
 
-    // Dynamic UID fetch to ensure we always have the current authenticated user
     private val currentUid: String
         get() = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
@@ -81,7 +79,7 @@ class SellerHomeFragment : Fragment() {
         if (uid.isEmpty()) return
 
         sellerRepository.getSellerProducts(
-            sellerUid = uid,
+            uid,
             onSuccess = { products ->
                 if (isAdded) {
                     calculateAndDisplayStats(products)
@@ -100,11 +98,10 @@ class SellerHomeFragment : Fragment() {
         val lowStockProducts = products.filter { it.stockQuantity <= 5 }
         val lowStockCount = lowStockProducts.size
 
-        // Placeholder for sales/revenue until Orders module is implemented
         updateDashboardStats(
             products = totalProducts,
-            sales = 0,
-            revenue = "0",
+            sales = products.sumOf { it.soldCount },
+            revenue = products.sumOf { it.price * it.soldCount }.toString(),
             lowStockCount = lowStockCount,
         )
 
@@ -136,7 +133,7 @@ class SellerHomeFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnProfile.setOnClickListener {
-            Toast.makeText(requireContext(), "Profile feature coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Profile opening soon", Toast.LENGTH_SHORT).show()
         }
 
         binding.fabAddProduct.setOnClickListener {
@@ -148,7 +145,7 @@ class SellerHomeFragment : Fragment() {
 
         binding.btnViewInventory.setOnClickListener {
             (activity as? MainActivity)?.navigationManager?.replaceFragment(
-                fragment = SellerProductsFragment(),
+                fragment = SellerInventoryFragment(),
                 addToBackStack = true,
             )
         }
@@ -162,24 +159,23 @@ class SellerHomeFragment : Fragment() {
         nav.navHome.setOnClickListener { /* Already here */ }
 
         nav.navRequests.setOnClickListener {
-            (activity as? MainActivity)?.navigationManager?.replaceFragment(
-                fragment = SellerRequestsFragment(),
-                addToBackStack = false
-            )
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerRequestsFragment(), false)
         }
 
         nav.navProducts.setOnClickListener {
-            (activity as? MainActivity)?.navigationManager?.replaceFragment(
-                fragment = SellerProductsFragment(),
-                addToBackStack = false,
-            )
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerProductsFragment(), false)
+        }
+
+        nav.navAnalytics.setOnClickListener {
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerAnalyticsFragment(), false)
         }
 
         nav.navInventory.setOnClickListener {
-            (activity as? MainActivity)?.navigationManager?.replaceFragment(
-                fragment = SellerProductsFragment(),
-                addToBackStack = false,
-            )
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerInventoryFragment(), false)
+        }
+
+        nav.navProfile.setOnClickListener {
+            Toast.makeText(requireContext(), "Profile coming soon", Toast.LENGTH_SHORT).show()
         }
     }
 
