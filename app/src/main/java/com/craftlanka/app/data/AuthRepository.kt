@@ -1,0 +1,235 @@
+package com.craftlanka.app.data
+
+import android.content.Context
+import android.net.Uri
+import android.util.Log
+import com.cloudinary.android.MediaManager
+import com.cloudinary.android.callback.ErrorInfo
+import com.cloudinary.android.callback.UploadCallback
+import com.craftlanka.app.BuildConfig
+import com.craftlanka.app.model.BuyerProfile
+import com.craftlanka.app.model.SellerProfile
+import com.craftlanka.app.model.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
+
+class AuthRepository {
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    // --- GOOGLE SIGN-IN ---
+
+    fun signInWithGoogle(
+        idToken: String,
+        // "buyer" or "seller"
+        targetRole: String,
+        // returns user role
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit,
+    ) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnSuccessListener { authResult ->
+                val uid = authResult.user?.uid ?: ""
+                val email = authResult.user?.email ?: ""
+                val userRef = db.collection("users").document(uid)
+
+                userRef.get().addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val role = document.getString("role") ?: targetRole
+                        onSuccess(role)
+                    } else {
+                        // Create initial user role record on first Google login
+                        val userDoc = User(uid = uid, email = email, role = targetRole)
+                        userRef.set(userDoc)
+                            .addOnSuccessListener { onSuccess(targetRole) }
+                            .addOnFailureListener { e -> onFailure(e.message ?: "Failed to save user role") }
+                    }
+                }.addOnFailureListener { e ->
+                    onFailure(e.message ?: "Failed to check user profile")
+                }
+            }
+            .addOnFailureListener { e ->
+                onFailure(e.message ?: "Google Authentication failed")
+            }
+    }
+
+    // --- WRITING DATA (Registration) ---
+
+    fun registerBuyer(
+        profile: BuyerProfile,
+        password: String,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit,
+    ) {
+        auth.createUserWithEmailAndPassword(profile.email, password)
+            .addOnSuccessListener { authResult ->
+                val uid = authResult.user?.uid ?: ""
+                val finalProfile = profile.copy(uid = uid)
+
+                db.collection("buyer_profiles").document(uid).set(finalProfile)
+                    .addOnSuccessListener {
+                        val userRecord = User(uid = uid, email = profile.email, role = "buyer")
+                        db.collection("users").document(uid).set(userRecord)
+                            .addOnSuccessListener { onSuccess() }
+                            .addOnFailureListener { onFailure("Failed to save user record") }
+                    }
+                    .addOnFailureListener { e -> onFailure(e.message ?: "Failed to save buyer profile") }
+            }
+            .addOnFailureListener { e -> onFailure(e.message ?: "Buyer registration failed") }
+    }
+
+    fun registerSeller(
+        profile: SellerProfile,
+        password: String,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit,
+    ) {
+        auth.createUserWithEmailAndPassword(profile.email, password)
+            .addOnSuccessListener { authResult ->
+                val uid = authResult.user?.uid ?: ""
+                val finalProfile = profile.copy(uid = uid)
+
+                db.collection("seller_profiles").document(uid).set(finalProfile)
+                    .addOnSuccessListener {
+                        val userRecord = User(uid = uid, email = profile.email, role = "seller")
+                        db.collection("users").document(uid).set(userRecord)
+                            .addOnSuccessListener { onSuccess() }
+                            .addOnFailureListener { onFailure("Failed to save user record") }
+                    }
+                    .addOnFailureListener { e -> onFailure(e.message ?: "Failed to save seller profile") }
+            }
+            .addOnFailureListener { e -> onFailure(e.message ?: "Seller registration failed") }
+    }
+
+    fun updateSellerProfile(
+        profile: SellerProfile,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit,
+    ) {
+        if (profile.uid.isEmpty()) {
+            onFailure("User ID is empty")
+            return
+        }
+        db.collection("seller_profiles").document(profile.uid).set(profile)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e.message ?: "Failed to update profile") }
+    }
+
+    // --- PHOTO UPLOAD (Using Cloudinary) ---
+
+    fun uploadPhoto(
+        context: Context,
+        imageUri: Uri,
+        // returns the URL string
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit,
+    ) {
+        try {
+            MediaManager.get()
+        } catch (e: Exception) {
+            val config =
+                hashMapOf(
+                    "cloud_name" to BuildConfig.CLOUDINARY_CLOUD_NAME,
+                    "secure" to true,
+                )
+            MediaManager.init(context, config)
+        }
+
+        MediaManager.get().upload(imageUri)
+            .option("unsigned", true)
+            .option("upload_preset", "craftlanka_preset")
+            .callback(
+                object : UploadCallback {
+                    override fun onStart(requestId: String?) {}
+
+                    override fun onProgress(
+                        requestId: String?,
+                        bytes: Long,
+                        totalBytes: Long,
+                    ) {}
+
+                    override fun onSuccess(
+                        requestId: String?,
+                        resultData: MutableMap<Any?, Any?>?,
+                    ) {
+                        val url = resultData?.get("secure_url") as? String ?: ""
+                        onSuccess(url)
+                    }
+
+                    override fun onError(
+                        requestId: String?,
+                        error: ErrorInfo?,
+                    ) {
+                        onFailure(error?.description ?: "Cloudinary upload failed")
+                    }
+
+                    override fun onReschedule(
+                        requestId: String?,
+                        error: ErrorInfo?,
+                    ) {}
+                },
+            )
+            .dispatch()
+    }
+
+    // --- READING DATA (Retrieval) ---
+
+    fun loginUser(
+        email: String,
+        password: String,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit,
+    ) {
+        Log.d("AuthRepo", "Login request for: $email")
+
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnSuccessListener { authResult ->
+                val uid = authResult.user?.uid ?: ""
+                Log.d("AuthRepo", "Firebase Auth Success. UID: $uid")
+
+                db.collection("users").document(uid).get()
+                    .addOnSuccessListener { document ->
+                        if (document.exists()) {
+                            val role = document.getString("role") ?: "buyer"
+                            Log.d("AuthRepo", "Firestore Success. Role: $role")
+                            onSuccess(role)
+                        } else {
+                            Log.e("AuthRepo", "Firestore Error: User document not found for UID: $uid")
+                            onFailure("User profile record not found in database.")
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("AuthRepo", "Firestore Error: ${e.message}")
+                        onFailure(e.message ?: "Failed to fetch user role from database")
+                    }
+            }
+            .addOnFailureListener { e ->
+                Log.e("AuthRepo", "Firebase Auth Failure: ${e.message}")
+                onFailure(e.message ?: "Login failed")
+            }
+    }
+
+    fun getBuyerProfile(
+        uid: String,
+        onSuccess: (BuyerProfile?) -> Unit,
+    ) {
+        db.collection("buyer_profiles").document(uid).get()
+            .addOnSuccessListener { document ->
+                onSuccess(document.toObject(BuyerProfile::class.java))
+            }
+            .addOnFailureListener { onSuccess(null) }
+    }
+
+    fun getSellerProfile(
+        uid: String,
+        onSuccess: (SellerProfile?) -> Unit,
+    ) {
+        db.collection("seller_profiles").document(uid).get()
+            .addOnSuccessListener { document ->
+                onSuccess(document.toObject(SellerProfile::class.java))
+            }
+            .addOnFailureListener { onSuccess(null) }
+    }
+}

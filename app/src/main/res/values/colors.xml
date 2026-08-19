@@ -7,4 +7,61 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Design Spec Colors -->
+    <color name="app_background">#FAF9E8</color>
+    <color name="background_cream">#FAF9E8</color>
+    <color name="header_forest_green">#1B4325</color>
+    <color name="dark_green">#0F5229</color>
+    <color name="mint_green">#D0F8DC</color>
+    <color name="mint_green_text">#0F5229</color>
+    <color name="gold_accent">#FFC107</color>
+    <color name="soft_red_logout">#FFEBEE</color>
+    <color name="dark_red_text">#B71C1C</color>
+    <color name="charcoal">#1A1A1A</color>
+    <color name="muted_gray">#757575</color>
+    <color name="light_blue_badge">#E3F2FD</color>
+    <color name="light_blue_text">#1976D2</color>
+    <color name="shipped_blue_bg">#E1F5FE</color>
+    <color name="shipped_blue_text">#0288D1</color>
+    <color name="delete_yellow_bg">#FFFDE7</color>
+    <!-- Project Compatibility & Status Colors -->
+    <color name="primary_blue">#3B82F6</color>
+    <color name="danger_red">#B71C1C</color>
+    <color name="warning_bg">#FFE2E2</color>
+    <color name="cart_background">#FDFCE7</color>
+    <color name="checkout_background">#FDFCE7</color>
+    <color name="light_green_fill">#EAF8EC</color>
+    <color name="light_gray_pill">#E0E0E0</color>
+    <color name="promo_blue_bg">#E2EDFF</color>
+    <color name="promo_blue_icon">#3B82F6</color>
+    <color name="price_drop_bg">#FFE2E2</color>
+    <color name="price_drop_icon">#C2185B</color>
+    <color name="status_pending_bg">#FFECCC</color>
+    <color name="status_pending_text">#C47D00</color>
+    <color name="status_processing_bg">#E2EDFF</color>
+    <color name="status_processing_text">#3B62C2</color>
+    <color name="status_shipped_bg">#F0E5FF</color>
+    <color name="status_shipped_text">#7D3BC2</color>
+    <color name="status_delivered_bg">#D0F8DC</color>
+    <color name="status_delivered_text">#0F5229</color>
+    <color name="status_cancelled_bg">#FFE2E2</color>
+    <color name="status_cancelled_text">#C23B3B</color>
+    <color name="card_background">#FFFFFF</color>
+    <!-- Brand Colors -->
+    <color name="brand_green">#154212</color>
+    <color name="brand_green_dark">#0E3818</color>
+    <color name="brand_dark">#1B1D0E</color>
+    <color name="brand_brown">#8C3B00</color>
+    <color name="brand_orange">#FFA26A</color>
+    <!-- Navigation Colors -->
+    <color name="nav_active_bg">#FFA26A</color>
+    <color name="nav_active_content">#783603</color>
+    <color name="nav_inactive_content">#555555</color>
+    <!-- UI States -->
+    <color name="card_bg_red">#FEE2E2</color>
+    <color name="icon_bg_green">#ECF3E6</color>
+    <color name="icon_bg_red">#FEE2E2</color>
+    <color name="text_red">#DC2626</color>
+    <color name="text_grey">#42493E</color>
+    <color name="light_gray">#F5F5F5</color>
 </resources>

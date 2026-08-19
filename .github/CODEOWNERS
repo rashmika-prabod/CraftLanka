@@ -1,0 +1,16 @@
+# Default repository owners
+*       @rashmika-prabod
+
+# Buyer Dashboard & Logic
+/app/src/main/java/com/craftlanka/app/buyer/    @rashmika-prabod @seshan03
+/app/src/main/res/layout/fragment_buyer_*       @rashmika-prabod @seshan03
+
+# Shared Database Models & Repositories
+/app/src/main/java/com/craftlanka/app/model/    @rashmika-prabod @seshan03
+/app/src/main/java/com/craftlanka/app/data/     @rashmika-prabod @seshan03
+
+# Build scripts and workflow configurations
+/.github/workflows/   @rashmika-prabod
+/build.gradle.kts     @rashmika-prabod
+/app/build.gradle.kts @rashmika-prabod
+/gradle/              @rashmika-prabod
