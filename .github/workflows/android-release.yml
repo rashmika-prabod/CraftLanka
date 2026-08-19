@@ -32,30 +32,45 @@ jobs:
         env:
           GOOGLE_SERVICES_SECRET: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          if [ -n "$GOOGLE_SERVICES_SECRET" ]; then
-            echo "$GOOGLE_SERVICES_SECRET" | base64 --decode > app/google-services.json
-          else
-            echo "Warning: GOOGLE_SERVICES_JSON secret not found. Generating mock file to satisfy build dependencies."
+          if [ -z "$GOOGLE_SERVICES_SECRET" ]; then
+            echo "Warning: GOOGLE_SERVICES_JSON secret not found. Generating mock file."
             echo '{"project_info":{"project_number":"0","project_id":"mock","storage_bucket":"mock"},"client":[{"client_info":{"mobilesdk_app_id":"1:0:android:0","android_client_info":{"package_name":"com.craftlanka.app"}},"api_key":[{"current_key":"mock_key"}]}]}' > app/google-services.json
+          else
+            if echo "$GOOGLE_SERVICES_SECRET" | base64 --decode > /dev/null 2>&1; then
+              echo "$GOOGLE_SERVICES_SECRET" | base64 --decode > app/google-services.json
+            else
+              echo "$GOOGLE_SERVICES_SECRET" > app/google-services.json
+            fi
           fi
 
       - name: Grant Execute Permission
         run: chmod +x ./gradlew
 
-      - name: Build Release APK
-        run: ./gradlew assembleRelease --stacktrace
+      - name: Build APKs
+        # We build both Debug (easy install) and Release (official)
+        run: ./gradlew assembleDebug assembleRelease --stacktrace
 
-      - name: Upload Release APK Artifact
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: app-release-apk
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          name: app-apks
+          path: app/build/outputs/apk/**/*.apk
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: app/build/outputs/apk/release/app-release-unsigned.apk
+          # We attach the Debug APK as the primary one because it is 'pre-signed' and easy to install
+          files: |
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/release/app-release-unsigned.apk
           name: Release ${{ github.ref_name }}
+          body: |
+            ## CraftLanka Release ${{ github.ref_name }}
+            
+            ### Installation Instructions:
+            1. Download **app-debug.apk** for the easiest installation.
+            2. Open the file on your Android device.
+            3. If prompted, allow "Install from Unknown Sources".
           draft: false
           prerelease: false
         env:
