@@ -39,8 +39,8 @@ jobs:
           if [ -n "$GOOGLE_SERVICES_SECRET" ]; then
             echo "$GOOGLE_SERVICES_SECRET" | base64 --decode > app/google-services.json
           else
-            echo "Warning: GOOGLE_SERVICES_JSON secret not found. Generating mock file."
-            echo '{"project_info":{"project_number":"0","project_id":"mock","storage_bucket":"mock"},"client":[{"client_info":{"mobilesdk_app_id":"1:0:android:0","android_client_info":{"package_name":"com.craftlanka.app"}}}]}' > app/google-services.json
+            echo "Warning: GOOGLE_SERVICES_JSON secret not found. Generating mock file to satisfy build dependencies."
+            echo '{"project_info":{"project_number":"0","project_id":"mock","storage_bucket":"mock"},"client":[{"client_info":{"mobilesdk_app_id":"1:0:android:0","android_client_info":{"package_name":"com.craftlanka.app"}},"api_key":[{"current_key":"mock_key"}]}]}' > app/google-services.json
           fi
 
       - name: Grant Execute Permission for Gradle
