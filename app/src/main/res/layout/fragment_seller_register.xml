@@ -219,8 +219,7 @@
                         <TextView
                             android:layout_width="64dp"
                             android:layout_height="56dp"
-                            android:background="@drawable/bg_circle_orange"
-                            android:backgroundTint="#EBEFE3"
+                            android:background="@drawable/bg_rounded_12dp"
                             android:gravity="center"
                             android:text="@string/prefix_country_code"
                             android:textColor="#1B1D0E"
@@ -538,7 +537,7 @@
                             android:id="@+id/et_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/hint_password"
+                            android:hint="••••••••"
                             android:inputType="textPassword"
                             android:textColor="#1B1D0E"
                             android:textColorHint="#999999"

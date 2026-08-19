@@ -2,6 +2,7 @@ package com.craftlanka.app.data
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
@@ -102,9 +103,23 @@ class AuthRepository {
             .addOnFailureListener { e -> onFailure(e.message ?: "Seller registration failed") }
     }
 
+    fun updateSellerProfile(
+        profile: SellerProfile,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit,
+    ) {
+        if (profile.uid.isEmpty()) {
+            onFailure("User ID is empty")
+            return
+        }
+        db.collection("seller_profiles").document(profile.uid).set(profile)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e.message ?: "Failed to update profile") }
+    }
+
     // --- PHOTO UPLOAD (Using Cloudinary) ---
 
-    fun uploadSellerPhoto(
+    fun uploadPhoto(
         context: Context,
         imageUri: Uri,
         // returns the URL string
@@ -167,23 +182,33 @@ class AuthRepository {
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit,
     ) {
+        Log.d("AuthRepo", "Login request for: $email")
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener { authResult ->
                 val uid = authResult.user?.uid ?: ""
+                Log.d("AuthRepo", "Firebase Auth Success. UID: $uid")
+
                 db.collection("users").document(uid).get()
                     .addOnSuccessListener { document ->
                         if (document.exists()) {
                             val role = document.getString("role") ?: "buyer"
+                            Log.d("AuthRepo", "Firestore Success. Role: $role")
                             onSuccess(role)
                         } else {
+                            Log.e("AuthRepo", "Firestore Error: User document not found for UID: $uid")
                             onFailure("User profile record not found in database.")
                         }
                     }
                     .addOnFailureListener { e ->
+                        Log.e("AuthRepo", "Firestore Error: ${e.message}")
                         onFailure(e.message ?: "Failed to fetch user role from database")
                     }
             }
-            .addOnFailureListener { e -> onFailure(e.message ?: "Login failed") }
+            .addOnFailureListener { e ->
+                Log.e("AuthRepo", "Firebase Auth Failure: ${e.message}")
+                onFailure(e.message ?: "Login failed")
+            }
     }
 
     fun getBuyerProfile(

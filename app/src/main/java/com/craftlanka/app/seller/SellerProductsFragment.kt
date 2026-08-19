@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 class SellerProductsFragment : Fragment() {
 
     private var bindingVar: FragmentSellerProductsBinding? = null
-    private val binding get() = bindingVar!!
+    val binding get() = bindingVar!!
 
     private lateinit var productAdapter: SellerProductsAdapter
     private val authRepository = AuthRepository()
@@ -56,7 +56,10 @@ class SellerProductsFragment : Fragment() {
         setupSearch()
 
         binding.btnProfileHeader.setOnClickListener {
-            Toast.makeText(requireContext(), "Profile feature coming soon", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(
+                fragment = SellerProfileFragment(),
+                addToBackStack = true,
+            )
         }
     }
 
@@ -187,7 +190,22 @@ class SellerProductsFragment : Fragment() {
         nav.navHome.setOnClickListener {
             (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerHomeFragment(), false)
         }
-        nav.navProducts.setOnClickListener { fetchSellerProducts() }
+        nav.navRequests.setOnClickListener {
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerRequestsFragment(), false)
+        }
+        nav.navProducts.setOnClickListener {
+            // Already here, maybe refresh data
+            fetchSellerProducts()
+        }
+        nav.navAnalytics.setOnClickListener {
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerAnalyticsFragment(), false)
+        }
+        nav.navInventory.setOnClickListener {
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerInventoryFragment(), false)
+        }
+        nav.navProfile.setOnClickListener {
+            (activity as? MainActivity)?.navigationManager?.replaceFragment(SellerProfileFragment(), false)
+        }
     }
 
     private fun resetAllNavItems() {

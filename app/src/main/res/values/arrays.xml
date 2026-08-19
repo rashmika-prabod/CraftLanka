@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="cities_array">
+        <item>Select City</item>
+        <item>Colombo</item>
+        <item>Kandy</item>
+        <item>Galle</item>
+        <item>Matara</item>
+        <item>Jaffna</item>
+        <item>Negombo</item>
+        <item>Kurunegala</item>
+        <item>Ratnapura</item>
+        <item>Kegalle</item>
+    </string-array>
+
     <string-array name="product_categories">
-        <item>Pottery</item>
+        <item>Select a category</item>
         <item>Woodwork</item>
+        <item>Pottery</item>
         <item>Handloom</item>
         <item>Jewelry</item>
+        <item>Batik</item>
         <item>Masks</item>
+        <item>Paintings</item>
         <item>Other</item>
     </string-array>
 </resources>

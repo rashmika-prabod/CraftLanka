@@ -65,6 +65,9 @@ android {
 }
 
 spotless {
+    // Only check files that have changed relative to main
+    ratchetFrom("origin/main")
+
     kotlin {
         target("**/*.kt")
         ktlint().editorConfigOverride(
